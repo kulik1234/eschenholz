@@ -1,0 +1,25 @@
+.main {
+    background-color: #999b;
+    height: 35px;
+    width: 35px;
+    display: none;
+    flex-direction: column;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+
+}
+.burgerPart {
+    flex: 1;
+    background-color: #0009;
+    border-radius: 30px;
+    border-color: black;
+    margin: 3px;
+
+}
+@media only screen and (max-width: 600px) {
+    .main {
+      background-color: lightblue;
+      display: flex;
+    }
+  }

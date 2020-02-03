@@ -1,0 +1,23 @@
+.main {
+    padding: 10px;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.companyName {
+    font-weight: bold;
+    font-size: 1.5em;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #7558;
+    
+}
+@media only screen and (max-width: 600px) {
+    .main {
+        display: none;
+    }
+    .companyName {
+        display: block;
+        margin: auto;
+    }
+  }
