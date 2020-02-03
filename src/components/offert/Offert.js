@@ -1,9 +1,9 @@
 import React from 'react';
-
+import Style from './css/MainOffertStyle.module.css';
 class Offert extends React.Component {
     render() {
       return (
-        <div>to jest oferta</div>
+        <div className={Style.main}>to jest oferta</div>
       );
     }
   }
