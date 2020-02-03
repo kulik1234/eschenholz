@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HeaderStyles from './header_style/MainHeaderStyles.module.css';
-import HeaderMenu from './components/menu/HeaderMenu/HeaderMenu';
+import HeaderMenu from './components/menu/header-menu/HeaderMenu';
 
 class Header extends Component {
   render() {

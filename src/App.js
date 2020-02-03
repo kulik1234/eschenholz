@@ -1,22 +1,44 @@
 import React from 'react';  
-import AppStyles from './app_style/MainAppStyle.module.css';
+import ReactDOM from 'react-dom';
 import Header from './Header';
 import Footer from './Footer';
+import Home from './components/home/Home';
+import Offert from './components/offert/Offert';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch
+} from "react-router-dom";
+import Contact from './components/contact/Contact';
 
 class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Header/>
-        <div className={AppStyles.mystyle}>
-          <div className="App-header">
-            <h2>Welcome to React</h2>
-          </div>
-          <p>
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-        </div>
-        <Footer />
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              {() => {
+                ReactDOM.render(<Home />, document.getElementById("root"));
+                return ("");
+              }}
+            </Route>
+            <Route path="/offert">
+              {() => {
+                ReactDOM.render(<Offert />, document.getElementById("root"));
+                return ("");
+              }}
+            </Route>
+            <Route path="/contact">
+              {() => {
+                ReactDOM.render(<Contact />, document.getElementById("root"));
+                return ("");
+              }}
+            </Route>
+          </Switch>
+        </Router>
       </React.Fragment>
       
     );

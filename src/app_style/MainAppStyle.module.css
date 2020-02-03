@@ -5,3 +5,6 @@
     font-family: Arial;  
     text-align: center;  
   }  
+.displayNone{
+  display: none;
+}
