@@ -6,16 +6,54 @@ import MenuItem from './modules/MenuItem';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link,
-  useRouteMatch
+  Route
 } from "react-router-dom";
 
 import Home from '../../../components/home/Home';
 import Offert from '../../../components/offert/Offert';
 import Contact from '../../../components/contact/Contact';
 
+
+
+const modalRoot = document.getElementById('root');
+
+
 class HeaderMenu extends Component {
+
+
+  /*componentDiDUpdate(prevProps,prevState,snapshot){
+
+
+  }*/
+
+  componentDidMount(){
+    return (
+      <Router>
+          <Switch>
+            <Route exact path="/">
+              {() => {
+                ReactDOM.render(<Home />, document.getElementById("root"));
+                return ("");
+              }}
+            </Route>
+            <Route path="/offert">
+              {() => {
+                ReactDOM.render(<Offert />, document.getElementById("root"));
+                return ("");
+              }}
+            </Route>
+            <Route path="/contact">
+              {() => {
+                ReactDOM.render(<Contact />, document.getElementById("root"));
+                return ("");
+              }}
+            </Route>
+          </Switch>
+        </Router>
+    );
+
+  }
+
   render() {
     return (
       <div className={MenuStyle.main}>
@@ -27,19 +65,19 @@ class HeaderMenu extends Component {
           <Switch>
             <Route exact path="/">
             {()=>{
-                ReactDOM.render(<Home />,document.getElementById("root"));
+                ReactDOM.render(<Home />,modalRoot);
                 return ("");
               }}
             </Route>
             <Route path="/offert">
             {()=>{
-                ReactDOM.render(<Offert />,document.getElementById("root"));
+                ReactDOM.render(<Offert />,modalRoot);
                 return ("");
               }}
             </Route>
             <Route path="/contact">
               {()=>{
-                ReactDOM.render(<Contact />,document.getElementById("root"));
+                ReactDOM.render(<Contact />,modalRoot);
                 return ("");
               }}
             </Route>

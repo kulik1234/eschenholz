@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import MenuItemStyle from './css/MenuItemStyles.module.css';
 import AppStyle from '../../../../app_style/MainAppStyle.module.css'
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch
+  Link
 } from "react-router-dom";
 
 class MenuItem extends Component {

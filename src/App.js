@@ -1,15 +1,11 @@
 import React from 'react';  
 import ReactDOM from 'react-dom';
-import Header from './Header';
-import Footer from './Footer';
 import Home from './components/home/Home';
 import Offert from './components/offert/Offert';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link,
-  useRouteMatch
+  Route
 } from "react-router-dom";
 import Contact from './components/contact/Contact';
 
