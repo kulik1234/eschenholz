@@ -1,9 +1,11 @@
 import React from 'react';
 import Style from './css/MainContactStyles.module.css';
 import Item from './modules/Item';
+import Message from './modules/Message';
 
-const col1 = ["adres","ulica","kod pocztowy"];
-
+const col1 = ["ulica","kod pocztowy"];
+const col2 = ["Imie","nazwisko","telefon"];
+const col3 = ["nip","nazwa","krs"];
 class Contact extends React.Component {
 
 
@@ -15,33 +17,21 @@ class Contact extends React.Component {
           <div className={Style.background}>
             <div className={Style.container}>
               <div className={Style.subcontainer}>
-                {col1.map((a)=><Item label={a}/>)}
+                <Item label="adres firmy" bolded="1" key="0" />
+                {col1.map((a, i) => <Item label={a} key={i + 1} />)}
               </div>
               <div className={Style.subcontainer}>
                 {}
-                <Item label="właściciel" bolded="1" />
-                <Item label="Imie" />
-                <Item label="nazwisko" />
-                <Item label="telefon" />
+                <Item label="właściciel" bolded="1" key="0" />
+                {col2.map((a, i) => <Item label={a} key={i + 1} />)}
               </div>
               <div className={Style.subcontainer}>
-                <Item label="Dane firmy" bolded="1" />
-                <Item label="nip" />
-                <Item label="nazwa" />
-                <Item label="krs" />
+                <Item label="Dane firmy" bolded="1" key="0" />
+                {col3.map((a, i) => <Item label={a} key={i + 1} />)}
               </div>
-              
             </div>
-            <div className={Style.message}>
-              <div>Napisz wiadomosc</div>
-              <div contentEditable className={Style.textarea}>asdfasdf</div>
-              <button>Wyslij wiadomosc</button>
-            </div>
+            <Message />
           </div>
-          
-        
-        
-        
         </div>
       );
     }
