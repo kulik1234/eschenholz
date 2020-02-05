@@ -1,26 +1,30 @@
 import React from 'react';
 import Style from './css/MessageStyles.module.css';
-import ReactDOM from 'react-dom';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 
 
-const body = document.getElementById("body");
+
 
 
 class Message extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {loadingScreen: false};
         this.nameInput = React.createRef();
         this.emailInput = React.createRef();
         this.topicInput = React.createRef();
         this.phoneInput = React.createRef();
+        this.loading = React.createRef();
         this.emailCheckboxInput = React.createRef();
         this.phoneCheckboxInput = React.createRef();
         this.messageBody = React.createRef();
         this.readContent = this.readContent.bind(this);
         this.phone = this.phone.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
+        this.showLoadingScreen = this.showLoadingScreen.bind(this);
+        this.hideLoadingScreen = this.hideLoadingScreen.bind(this);
+
 
       }
     readContent(){
@@ -39,9 +43,7 @@ class Message extends React.Component {
     phone(e){
         console.log(e);
     }
-    showLoadingScreen(){
-        ReactDOM.createPortal(<LoadingScreen />,document.getElementById("body"));
-    }
+
 
     sendMessage() {
         this.showLoadingScreen();
@@ -71,7 +73,17 @@ class Message extends React.Component {
             'content':this.readContent()
         }));
     }
+
+    showLoadingScreen(){
+        this.setState({loadingScreen: true});
+    }
+    hideLoadingScreen(){
+        this.setState({loadingScreen: false});
+    }
+
+
     render() {
+        const loadingScreen = this.state.loadingScreen ? (<LoadingScreen/>):null;
       return (
           <div className={Style.main + " " + Style.vertical}>
               <div className={Style.horizontal}>
@@ -108,6 +120,7 @@ class Message extends React.Component {
                       <button className={Style.button} onClick={this.sendMessage}>Wyslij wiadomosc</button>
                   </div>
               </div>
+              {loadingScreen}
           </div>
       );
     }

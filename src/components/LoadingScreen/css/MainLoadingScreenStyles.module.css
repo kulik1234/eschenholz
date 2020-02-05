@@ -1,6 +1,65 @@
 .main {
-    background-color: #7778;
-    height: 100px;
-    width: 100px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: #777d;
+    height: 100%;
+    width: 100%;
     z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+.animation {
+    height: 200px;
+    width: 200px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+
+}
+.animation div{
+    width: 20px;
+    margin: 10px;
+    height: 1px;
+    background-color: black;
+}
+.animation div:nth-child(1){
+    animation-name: loading;
+    animation-duration: 750ms;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+.animation div:nth-child(2){
+    animation-name: loading;
+    animation-duration: 750ms;
+    animation-delay: 250ms;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+.animation div:nth-child(3){
+    animation-name: loading;
+    animation-duration: 750ms;
+    animation-delay: 500ms;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+.animation div:nth-child(4){
+    animation-name: loading;
+    animation-duration: 750ms;
+    animation-delay: 750ms;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+.animation div:nth-child(5){
+    animation-name: loading;
+    animation-duration: 750ms;
+    animation-delay: 1000ms;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+}
+@keyframes loading
+      {
+        0% { transform:scaleY(1); }
+        100% { transform:scaleY(200); }
+      }
