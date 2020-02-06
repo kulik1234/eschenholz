@@ -1,14 +1,17 @@
 package pl.eschenholz.api.restcontroller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.eschenholz.api.entity.Photo;
 import pl.eschenholz.api.repository.PhotoRepo;
 
-import java.util.Optional;
+import java.util.*;
+
 
 @RestController
 public class PhotoController {
 
+    @Autowired
     PhotoRepo repo;
 
     @GetMapping("/photo")
