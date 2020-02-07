@@ -1,5 +1,6 @@
 package pl.eschenholz.api.restcontroller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,15 +22,22 @@ public class PhotoController {
     @GetMapping("/photo")
     public Iterable<Photo> getAll(
             @RequestParam(defaultValue = "1") Integer pageNo,
-            @RequestParam(defaultValue = "30") Integer pageSize,
+            @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "false") Boolean onlySort) {
+            @RequestParam(defaultValue = "false") Boolean onlySort,
+            @RequestParam(defaultValue = "false") Boolean getAll,
+            @RequestParam(defaultValue = "false") Boolean reverseSorting
+            ) {
         if(onlySort){
-            return service.findAll(sortBy);
+            return service.findAll(sortBy,reverseSorting);
+        }
+        else if(getAll)
+        {
+            return service.findAll();
         }
         else
         {
-            return service.findAll(pageNo,pageSize,sortBy);
+            return service.findAll(pageNo,pageSize,sortBy,reverseSorting);
         }
     }
 

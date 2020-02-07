@@ -26,8 +26,17 @@ public class PhotoService {
     public Iterable<Photo> findAll() {
         return repo.findAll();
     }
-    public Iterable<Photo> findAll(int pageNumber,int pageSize,String sortedBy) {
-        Pageable paging = PageRequest.of(pageNumber-1,pageSize, Sort.by(sortedBy));
+    public Iterable<Photo> findAll(int pageNumber,int pageSize,String sortedBy,boolean reverseSorting) {
+        Sort sort = null;
+        if(!reverseSorting)
+        {
+            sort = Sort.by(sortedBy).ascending();
+        }
+        else
+        {
+            sort = Sort.by(sortedBy).descending();
+        }
+        Pageable paging = PageRequest.of(pageNumber-1,pageSize, sort);
         Page<Photo> page = repo.findAll(paging);
         if(page.hasContent()){
             return page.getContent();
@@ -36,8 +45,16 @@ public class PhotoService {
         }
     }
 
-    public Iterable<Photo> findAll(String sortedBy){
-        Sort sort = Sort.by(sortedBy);
+    public Iterable<Photo> findAll(String sortedBy,boolean reverseSorting){
+        Sort sort = null;
+        if(!reverseSorting)
+        {
+            sort = Sort.by(sortedBy).ascending();
+        }
+        else
+        {
+            sort = Sort.by(sortedBy).descending();
+        }
         return repo.findAll(sort);
     }
 

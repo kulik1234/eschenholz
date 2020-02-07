@@ -19,8 +19,10 @@ import java.util.Objects;
 public class Photo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String nameOrTitle;
 
     private String path;
 
@@ -35,9 +37,10 @@ public class Photo {
     public Photo() {
     }
 
-    public Photo(Long id, String path, String description, String author, PhotoCategory category,LocalDateTime date) {
+    public Photo(Long id, String nameOrTitle,String path, String description, String author, PhotoCategory category, LocalDateTime date) {
 
         this.id = id;
+        this.nameOrTitle = nameOrTitle;
         this.path = path;
         this.description = description;
         this.author = author;
@@ -93,23 +96,28 @@ public class Photo {
         this.date = date;
     }
 
+    public String getNameOrTitle() {
+        return nameOrTitle;
+    }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Photo photo = (Photo) o;
-        return Objects.equals(id, photo.id) &&
-                Objects.equals(path, photo.path) &&
-                Objects.equals(description, photo.description) &&
-                Objects.equals(author, photo.author) &&
-                category == photo.category &&
-                Objects.equals(date, photo.date);
+    public void setNameOrTitle(String nameOrTitle) {
+        this.nameOrTitle = nameOrTitle;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, path, description, author, category, date);
+    public String toString() {
+        return "Photo{" +
+                "id=" + id +
+                ", nameOrTitle='" + nameOrTitle + '\'' +
+                ", path='" + path + '\'' +
+                ", description='" + description + '\'' +
+                ", author='" + author + '\'' +
+                ", category=" + category +
+                ", date=" + date +
+                '}';
     }
+
+
 }
+
+
