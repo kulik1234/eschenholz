@@ -1,28 +1,26 @@
 package pl.eschenholz.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import pl.eschenholz.api.entity.Photo;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
-public class MainService {
+public abstract class MainService<T,R extends PagingAndSortingRepository<T,Long>> {
 
-   /*@Autowired
-   CustomRepo<Photo> photoRepo;
-
-
-    public Iterable<Photo> findAll(int pageNo, int pageSize, String sortBy, Boolean reverseSorting){
-        return photoRepo.findAll(pageNo,pageSize,sortBy,reverseSorting);
-    }
-*/
-
-/*
     @Autowired
-    CustomerRepo customerRepo;
+      private R repo;
+
 
 
     public Optional<T> findById(Long id) {
-        RepositoryFactorySupport factory =
         return repo.findById(id);
     }
 
@@ -67,5 +65,13 @@ public class MainService {
 
     public void delete(T p) {
         repo.delete(p);
-    }*/
+    }
+
+    public R getRepo() {
+        return repo;
+    }
+
+    public void setRepo(R repo) {
+        this.repo = repo;
+    }
 }
