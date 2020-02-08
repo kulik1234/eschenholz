@@ -8,6 +8,10 @@ import {
   Route
 } from "react-router-dom";
 import Contact from './components/contact/Contact';
+import Gallery from './components/gallery/Gallery';
+import About from './components/about/About';
+
+const modalRoot = document.getElementById('root');
 
 class App extends React.Component {
   render() {
@@ -17,19 +21,31 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/">
               {() => {
-                ReactDOM.render(<Home />, document.getElementById("root"));
+                ReactDOM.render(<Home />, modalRoot);
                 return ("");
               }}
             </Route>
             <Route path="/offert">
               {() => {
-                ReactDOM.render(<Offert />, document.getElementById("root"));
+                ReactDOM.render(<Offert />, modalRoot);
                 return ("");
               }}
             </Route>
             <Route path="/contact">
               {() => {
-                ReactDOM.render(<Contact />, document.getElementById("root"));
+                ReactDOM.render(<Contact />, modalRoot);
+                return ("");
+              }}
+            </Route>
+            <Route path="/gallery">
+              {()=>{
+                ReactDOM.render(<Gallery />,modalRoot);
+                return ("");
+              }}
+            </Route>
+            <Route path="/about">
+              {()=>{
+                ReactDOM.render(<About />,modalRoot);
                 return ("");
               }}
             </Route>
