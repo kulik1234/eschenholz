@@ -1,15 +1,11 @@
 package pl.eschenholz.api.restcontroller;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import pl.eschenholz.api.entity.Photo;
-import pl.eschenholz.api.repository.PhotoRepo;
 import pl.eschenholz.api.service.PhotoService;
 
-import java.util.*;
+import java.util.Optional;
 
 
 @RestController
