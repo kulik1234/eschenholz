@@ -13,10 +13,10 @@ import java.util.ArrayList;
 public class MainRestController {
 
 
-    @GetMapping("/test")
+    @GetMapping("/api/test")
     public ArrayList<Photo> test(){
         ArrayList<Photo> abc = new ArrayList<Photo>();
-        abc.add(new Photo(null,"/static/favicon.ico","desc","", PhotoCategory.STAIRS, LocalDateTime.now()));
+        abc.add(new Photo(null,"zdjecie","/static/favicon.ico","desc","", PhotoCategory.STAIRS, LocalDateTime.now()));
         return abc;
     }
 }
