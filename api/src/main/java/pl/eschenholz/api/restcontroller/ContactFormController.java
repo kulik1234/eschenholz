@@ -7,12 +7,13 @@ import pl.eschenholz.api.entity.Customer;
 import pl.eschenholz.api.service.ContactFormService;
 import pl.eschenholz.api.service.CustomerService;
 
-
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class ContactFormController {
+public class ContactFormController //extends BaseController<ContactForm,ContactFormService, pl.eschenholz.api.interfaces.ContactForm>
+{
+
     @Autowired
     private ContactFormService service;
 
@@ -58,4 +59,5 @@ public class ContactFormController {
     public void removeCustomer(@RequestBody ContactForm p){
         service.delete(p);
     }
+
 }

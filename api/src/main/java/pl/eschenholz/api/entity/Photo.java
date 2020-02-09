@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
-public class Photo {
+public class Photo extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
