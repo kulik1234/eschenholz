@@ -47,7 +47,7 @@ class Message extends React.Component {
 
     sendMessage() {
         this.showLoadingScreen();
-        /*fetch("",{
+        var resp = fetch("http://localhost:8080/api/contact-form",{
             method: 'POST',
             headers: {
                 'Accept':'application/json',
@@ -62,8 +62,12 @@ class Message extends React.Component {
                 'byPhone':this.phoneCheckboxInput.current.value,
                 'content':this.readContent()
             })
-        })*/
-        console.log(JSON.stringify({
+        })
+        .then(resp => console.log(resp.json) )
+        .catch(r => console.log(r))
+        .finally(this.hideLoadingScreen());
+        
+        /*console.log(JSON.stringify({
             'name':this.nameInput.current.value,
             'email':this.emailInput.current.value,
             'phone':this.phoneInput.current.value,
@@ -71,7 +75,7 @@ class Message extends React.Component {
             'byEmail':this.emailCheckboxInput.current.checked?1:0,
             'byPhone':this.phoneCheckboxInput.current.checked?1:0,
             'content':this.readContent()
-        }));
+        }));*/
     }
 
     showLoadingScreen(){
