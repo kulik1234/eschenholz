@@ -1,68 +1,13 @@
 package pl.eschenholz.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pl.eschenholz.api.entity.Photo;
 import pl.eschenholz.api.repository.PhotoRepo;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 @Service
-public class PhotoService {
+public class PhotoService extends MainService<Photo, PhotoRepo> {
 
-    @Autowired
-    PhotoRepo repo;
-
-
-    public Optional<Photo> findById(Long id) {
-        return repo.findById(id);
-    }
-
-    public Iterable<Photo> findAll() {
-        return repo.findAll();
-    }
-    public Iterable<Photo> findAll(int pageNumber,int pageSize,String sortedBy,boolean reverseSorting) {
-        Sort sort = null;
-        if(!reverseSorting)
-        {
-            sort = Sort.by(sortedBy).ascending();
-        }
-        else
-        {
-            sort = Sort.by(sortedBy).descending();
-        }
-        Pageable paging = PageRequest.of(pageNumber-1,pageSize, sort);
-        Page<Photo> page = repo.findAll(paging);
-        if(page.hasContent()){
-            return page.getContent();
-        } else {
-            return new ArrayList<Photo>();
-        }
-    }
-
-    public Iterable<Photo> findAll(String sortedBy,boolean reverseSorting){
-        Sort sort = null;
-        if(!reverseSorting)
-        {
-            sort = Sort.by(sortedBy).ascending();
-        }
-        else
-        {
-            sort = Sort.by(sortedBy).descending();
-        }
-        return repo.findAll(sort);
-    }
-
-    public Photo save(Photo p) {
-        return repo.save(p);
-    }
-
-    public void delete(Photo p) {
-        repo.delete(p);
-    }
+   @Autowired
+    private PhotoRepo repo;
 }

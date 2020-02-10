@@ -2,22 +2,23 @@ package pl.eschenholz.api.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.eschenholz.api.entity.ContactForm;
 import pl.eschenholz.api.entity.Customer;
-import pl.eschenholz.api.repository.CustomerRepo;
+import pl.eschenholz.api.service.ContactFormService;
 import pl.eschenholz.api.service.CustomerService;
-import pl.eschenholz.api.service.MainService;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class CustomerController {
+public class ContactFormController //extends BaseController<ContactForm,ContactFormService, pl.eschenholz.api.interfaces.ContactForm>
+{
 
     @Autowired
-    private CustomerService service;
+    private ContactFormService service;
 
-    @GetMapping("/customer")
-    public Iterable<Customer> getAll(
+    @GetMapping("/contact-form")
+    public Iterable<ContactForm> getAll(
             @RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -39,23 +40,24 @@ public class CustomerController {
     }
 
 
-    @GetMapping("/customer/{id}")
-    public Optional<Customer> getById(@PathVariable("id") Long id){
+    @GetMapping("/contact-form/{id}")
+    public Optional<ContactForm> getById(@PathVariable("id") Long id){
         return service.findById(id);
     }
 
-    @PutMapping("/customer")
-    public Customer insertCustomer(@RequestBody Customer p){
+    @PutMapping("/contact-form")
+    public ContactForm insertCustomer(@RequestBody ContactForm p){
         return service.save(p);
     }
 
-    @PostMapping("/customer")
-    public Customer updateCustomer(@RequestBody Customer p){
+    @PostMapping("/contact-form")
+    public ContactForm updateCustomer(@RequestBody ContactForm p){
         return service.findById(p.getId()).orElse(service.save(p));
     }
 
-    @DeleteMapping("/customer")
-    public void removeCustomer(@RequestBody Customer p){
+    @DeleteMapping("/contact-form")
+    public void removeCustomer(@RequestBody ContactForm p){
         service.delete(p);
     }
+
 }

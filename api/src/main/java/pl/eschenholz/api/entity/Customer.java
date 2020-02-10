@@ -3,9 +3,10 @@ package pl.eschenholz.api.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Customer {
+public class Customer extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +23,13 @@ public class Customer {
     private String address;
 
     @OneToMany
-    @JoinColumn(name = "id")
-    private List<ContactForm> contactForm;
+    @JoinColumn(name="customerId")
+    private Set<ContactForm> contactForm;
 
     public Customer() {
     }
 
-    public Customer(Long id, String name, String surname, String email, String phone, String address,List<ContactForm> contactForm) {
+    public Customer(Long id, String name, String surname, String email, String phone, String address,Set<ContactForm> contactForm) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -86,11 +87,11 @@ public class Customer {
         this.address = address;
     }
 
-    public List<ContactForm> getContactForm() {
+    public Set<ContactForm> getContactForm() {
         return contactForm;
     }
 
-    public void setContactForm(List<ContactForm> contactForm) {
+    public void setContactForm(Set<ContactForm> contactForm) {
         this.contactForm = contactForm;
     }
 }

@@ -12,8 +12,10 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class PhotoController {
 
+
     @Autowired
-    PhotoService service;
+    private PhotoService service;
+
 
     @GetMapping("/photo")
     public Iterable<Photo> getAll(

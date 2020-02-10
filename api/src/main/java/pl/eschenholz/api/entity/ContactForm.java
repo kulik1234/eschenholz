@@ -5,7 +5,7 @@ import pl.eschenholz.api.enums.ContactFormStatus;
 import javax.persistence.*;
 
 @Entity
-public class ContactForm {
+public class ContactForm extends Base{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,8 +82,8 @@ public class ContactForm {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setCustomerId(Long customer) {
+        this.customerId = customer;
     }
 
     public ContactFormStatus getStatus() {
