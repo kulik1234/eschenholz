@@ -3,6 +3,7 @@ package pl.eschenholz.api.entity;
 import pl.eschenholz.api.enums.ContactFormStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class ContactForm extends Base{
@@ -17,6 +18,7 @@ public class ContactForm extends Base{
 
     private Boolean ifPhone;
 
+    @NotNull
     private String content;
 
     private Long customerId;

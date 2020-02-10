@@ -1,12 +1,14 @@
 package pl.eschenholz.api.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 import pl.eschenholz.api.entity.ContactForm;
 import pl.eschenholz.api.entity.Customer;
 import pl.eschenholz.api.service.ContactFormService;
 import pl.eschenholz.api.service.CustomerService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RestController
@@ -16,6 +18,8 @@ public class ContactFormController //extends BaseController<ContactForm,ContactF
 
     @Autowired
     private ContactFormService service;
+
+
 
     @GetMapping("/contact-form")
     public Iterable<ContactForm> getAll(
@@ -46,8 +50,13 @@ public class ContactFormController //extends BaseController<ContactForm,ContactF
     }
 
     @PutMapping("/contact-form")
-    public ContactForm insertCustomer(@RequestBody ContactForm p){
-        return service.save(p);
+    @CrossOrigin
+    public ContactForm insertCustomer(@RequestBody ContactForm p,
+                                      @RequestParam(defaultValue = "") String name,
+                                      @RequestParam(defaultValue = "") String email,
+                                      @RequestParam(defaultValue = "") String phone
+    ){
+        return service.save(p,name,email,phone);
     }
 
     @PostMapping("/contact-form")

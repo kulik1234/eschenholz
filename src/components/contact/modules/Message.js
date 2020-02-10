@@ -13,7 +13,7 @@ class Message extends React.Component {
         this.state = {loadingScreen: false};
         this.nameInput = React.createRef();
         this.emailInput = React.createRef();
-        this.topicInput = React.createRef();
+        this.subjectInput = React.createRef();
         this.phoneInput = React.createRef();
         this.loading = React.createRef();
         this.emailCheckboxInput = React.createRef();
@@ -46,36 +46,47 @@ class Message extends React.Component {
 
 
     sendMessage() {
-        this.showLoadingScreen();
-        var resp = fetch("http://localhost:8080/api/contact-form",{
-            method: 'POST',
-            headers: {
-                'Accept':'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'name':this.nameInput.current.value,
-                'email':this.emailInput.current.value,
-                'phone':this.phoneInput.current.value,
-                'topic':this.topicInput.current.value,
-                'byEmail':this.emailCheckboxInput.current.value,
-                'byPhone':this.phoneCheckboxInput.current.value,
-                'content':this.readContent()
-            })
-        })
-        .then(resp => console.log(resp.json) )
-        .catch(r => console.log(r))
-        .finally(this.hideLoadingScreen());
         
-        /*console.log(JSON.stringify({
-            'name':this.nameInput.current.value,
-            'email':this.emailInput.current.value,
-            'phone':this.phoneInput.current.value,
-            'topic':this.topicInput.current.value,
-            'byEmail':this.emailCheckboxInput.current.checked?1:0,
-            'byPhone':this.phoneCheckboxInput.current.checked?1:0,
+        var obj = {
+            'name':this.nameInput.current.value.trim(),
+            'email':this.emailInput.current.value.trim(),
+            'phone':this.phoneInput.current.value.trim(),
+            'subject':this.subjectInput.current.value.trim(),
+            'ifEmail':this.emailCheckboxInput.current.checked?1:0,
+            'ifPhone':this.phoneCheckboxInput.current.checked?1:0,
             'content':this.readContent()
-        }));*/
+        };
+
+        if(
+        /[a-zA-Z]{5,50}/.test(obj.name)&&
+        /[a-zA-Z]{5,250}/.test(obj.content)&&
+        /[a-zA-Z]{5,50}/.test(obj.subject)&&
+        (
+            (obj.ifEmail&&/[a-zA-Z]{5,250}/.test(obj.email)) ||
+            (obj.ifPhone&&/[0-9]{9}/.test(obj.phone))
+        )
+        )
+        {
+            
+            fetch("http://localhost:8080/api/contact-form?name="+obj.name+"&email="+obj.email+"&phone="+obj.phone,{
+                method: 'PUT',
+                headers: {
+                    'Accept':'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            })
+            .then(resp => console.log(resp.json) )
+            .catch(r => console.log(r))
+            .finally(this.hideLoadingScreen());
+        }
+        else {
+            console.log("wpisano niepoprawne dane");
+            console.log(JSON.stringify(obj));
+        }
+        
+        
+        
     }
 
     showLoadingScreen(){
@@ -115,7 +126,7 @@ class Message extends React.Component {
               <div className={Style.horizontal}>
                   <div>
                       <div className={Style.label + " " + Style.messageTopic}>Temat wiadomości:</div>
-                      <input ref={this.topicInput} type="text" placeholder="Temat wiadomości" />
+                      <input ref={this.subjectInput} type="text" placeholder="Temat wiadomości" />
                   </div>
               </div>
               <div contentEditable className={Style.textarea} ref={this.messageBody}></div>
