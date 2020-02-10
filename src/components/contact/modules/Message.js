@@ -1,7 +1,7 @@
 import React from 'react';
 import Style from './css/MessageStyles.module.css';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
-
+import messages from '../../../messages/messages';
 
 
 
@@ -19,12 +19,13 @@ class Message extends React.Component {
         this.emailCheckboxInput = React.createRef();
         this.phoneCheckboxInput = React.createRef();
         this.messageBody = React.createRef();
+        this.warnings = React.createRef();
         this.readContent = this.readContent.bind(this);
-        this.phone = this.phone.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.showLoadingScreen = this.showLoadingScreen.bind(this);
         this.hideLoadingScreen = this.hideLoadingScreen.bind(this);
-
+        this.showWarnings = this.showWarnings.bind(this);
+        
 
       }
     readContent(){
@@ -56,15 +57,12 @@ class Message extends React.Component {
             'ifPhone':this.phoneCheckboxInput.current.checked?1:0,
             'content':this.readContent()
         };
+        this.setState(
+            {"message":obj}
+         );
 
         if(
-        /[a-zA-Z]{5,50}/.test(obj.name)&&
-        /[a-zA-Z]{5,250}/.test(obj.content)&&
-        /[a-zA-Z]{5,50}/.test(obj.subject)&&
-        (
-            (obj.ifEmail&&/[a-zA-Z]{5,250}/.test(obj.email)) ||
-            (obj.ifPhone&&/[0-9]{9}/.test(obj.phone))
-        )
+            this.checkInputs(obj)
         )
         {
             
@@ -95,12 +93,53 @@ class Message extends React.Component {
     hideLoadingScreen(){
         this.setState({loadingScreen: false});
     }
+    showWarnings(warnings){
+        this.warnings.current.innerHTML = "";
+        for(let b of warnings){
+            var div = document.createElement("div");
+            div.appendChild(document.createTextNode(b));
+            this.warnings.current.appendChild(div);
+        }
 
+    }
+
+    checkInputs(obj){
+        var warnings= new Array();
+        var errorCount = 0;
+
+        if(!/[a-zA-Z]{5,50}/.test(obj.name)){
+            warnings.push(messages.WRONG_NAME_AND_SURNAME);
+            errorCount++;
+        }
+        if(!/[a-zA-Z]{5,250}/.test(obj.content)){
+            warnings.push(messages.WRONG_CONTENT);
+            errorCount++;
+        }
+        if(!/^[a-zA-Z ]{5,50}$/.test(obj.subject)){
+            warnings.push(messages.WRONG_SUBJECT);
+            errorCount++;
+        }
+        if(!((obj.ifEmail&&/[a-zA-Z]{5,250}/.test(obj.email)) ||
+        (obj.ifPhone&&/[0-9]{9}/.test(obj.phone)))){
+            warnings.push(messages.WRONG_CONTACT);
+            errorCount++;
+        }
+
+        console.log(warnings);
+        this.showWarnings(warnings);
+
+        
+        if(errorCount)        
+        return false;
+        else return true;
+    }
 
     render() {
         const loadingScreen = this.state.loadingScreen ? (<LoadingScreen/>):null;
       return (
           <div className={Style.main + " " + Style.vertical}>
+              <div ref={this.warnings} className={Style.vertical + " "+ Style.warnings}>
+              </div>
               <div className={Style.horizontal}>
                   <div>
                       <div className={Style.label}>

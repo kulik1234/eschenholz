@@ -49,3 +49,16 @@
 .displayNone {
     display: none;
 }
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+.warnings {
+    color: red;
+    font-size: 0.9em;
+    margin: 5px;
+    text-align: center;
+}
+.warnings > div{
+    padding: 5px;
+}
