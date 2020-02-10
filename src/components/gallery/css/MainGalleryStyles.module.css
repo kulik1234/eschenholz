@@ -1,0 +1,12 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px;
+}
+.imageContainer {
+    width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    place-items: center;
+}

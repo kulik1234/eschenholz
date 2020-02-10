@@ -66,7 +66,7 @@ class Message extends React.Component {
         )
         {
             
-            fetch("http://localhost:8080/api/contact-form?name="+obj.name+"&email="+obj.email+"&phone="+obj.phone,{
+            fetch(messages.HOST+"/api/contact-form?name="+obj.name+"&email="+obj.email+"&phone="+obj.phone,{
                 method: 'PUT',
                 headers: {
                     'Accept':'application/json',
@@ -125,7 +125,6 @@ class Message extends React.Component {
             errorCount++;
         }
 
-        console.log(warnings);
         this.showWarnings(warnings);
 
         

@@ -18,6 +18,7 @@ public class PhotoController {
 
 
     @GetMapping("/photo")
+    @CrossOrigin
     public Iterable<Photo> getAll(
             @RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") Integer pageSize,
@@ -59,4 +60,9 @@ public class PhotoController {
     public void removePhoto(@RequestBody Photo p){
         service.delete(p);
     }
+
+    /*@PutMapping("/photo/save-file")
+    public Photo savePhotoFile(){
+
+    }*/
 }
