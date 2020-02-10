@@ -18,12 +18,3 @@
     flex-direction: column;
     justify-content: center;
 }
-.textarea {
-    height: 200px;
-    width: 800px;
-    border: 1px solid;
-    background-color: #fff;
-    padding: 5px;
-    overflow: auto;
-    margin: 10px auto;
-}
