@@ -10,7 +10,13 @@ class Message extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {loadingScreen: false};
+        this.state = {
+            loadingScreen: false,
+            loading: false,
+            data: [],
+            loadingErrors: []
+        
+        };
         this.nameInput = React.createRef();
         this.emailInput = React.createRef();
         this.subjectInput = React.createRef();
@@ -25,9 +31,27 @@ class Message extends React.Component {
         this.showLoadingScreen = this.showLoadingScreen.bind(this);
         this.hideLoadingScreen = this.hideLoadingScreen.bind(this);
         this.showWarnings = this.showWarnings.bind(this);
+        this.checkCheckbox = this.checkCheckbox.bind(this);
         
 
       }
+
+      checkCheckbox(e){
+          let input;
+          if(e.target.getAttribute("data") === "email")
+            {input = this.emailCheckboxInput.current;}
+            else
+            {input = this.phoneCheckboxInput.current;}
+          if(!e.target.value == ""){
+            input.checked = true;
+          }
+          else {
+              input.checked = false;
+          }
+      }
+      
+
+
     readContent(){
         var value = "";
         if (this.messageBody.current.children.length > 1) {
@@ -64,8 +88,9 @@ class Message extends React.Component {
         if(
             this.checkInputs(obj)
         )
-        {
-            
+        {  
+            this.showLoadingScreen();  
+            this.setState({loading:true});       
             fetch(messages.HOST+"/api/contact-form?name="+obj.name+"&email="+obj.email+"&phone="+obj.phone,{
                 method: 'PUT',
                 headers: {
@@ -74,15 +99,25 @@ class Message extends React.Component {
                 },
                 body: JSON.stringify(obj)
             })
-            .then(resp => console.log(resp.json) )
-            .catch(r => console.log(r))
-            .finally(this.hideLoadingScreen());
+            .then(resp => {
+                console.log(resp.json);
+            } )
+            .then(resp => {
+                this.setState({data:resp});
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({loadingErrors : err});
+            })
+            .finally(r=>{
+                this.setState({loading:false});  
+                this.hideLoadingScreen();  
+            })
         }
         else {
             console.log("wpisano niepoprawne dane");
             console.log(JSON.stringify(obj));
         }
-        
         
         
     }
@@ -104,23 +139,42 @@ class Message extends React.Component {
     }
 
     checkInputs(obj){
-        var warnings= new Array();
+        var warnings= [];
         var errorCount = 0;
 
-        if(!/[a-zA-Z]{5,50}/.test(obj.name)){
+        if(!messages.POLISH_CHARS_REGEXP_50.test(obj.name)){
             warnings.push(messages.WRONG_NAME_AND_SURNAME);
             errorCount++;
         }
-        if(!/[a-zA-Z]{5,250}/.test(obj.content)){
+        if(!/.{5,250}/.test(obj.content)){
             warnings.push(messages.WRONG_CONTENT);
             errorCount++;
         }
-        if(!/^[a-zA-Z ]{5,50}$/.test(obj.subject)){
+        if(!messages.POLISH_CHARS_REGEXP_50.test(obj.subject)){
             warnings.push(messages.WRONG_SUBJECT);
             errorCount++;
         }
-        if(!((obj.ifEmail&&/[a-zA-Z]{5,250}/.test(obj.email)) ||
-        (obj.ifPhone&&/[0-9]{9}/.test(obj.phone)))){
+        let true1 = false;
+        let true2 = false;
+        if(obj.ifEmail) {
+            if(messages.EMAIL_REGEXP.test(obj.email))
+                true1 = true;
+        }
+        else {
+            true1 = true;
+        }
+        if(obj.ifPhone){
+            if(/^[0-9]{9}$/.test(obj.phone))
+                 true2 = true;
+        
+        }
+        else {
+            true2 = true;
+        }
+        if(
+            !(true1 && true2&&(obj.ifEmail||obj.ifPhone))
+        )
+        {
             warnings.push(messages.WRONG_CONTACT);
             errorCount++;
         }
@@ -145,7 +199,7 @@ class Message extends React.Component {
                           <input ref={this.emailCheckboxInput} type="checkbox" className={Style.checkbox} name="contact" value="email" />
                           <label>Twój adres email:</label>
                       </div>
-                      <input ref={this.emailInput} type="text" placeholder="Adres email" />
+                      <input ref={this.emailInput} type="text" placeholder="Adres email" data="email" onInput={this.checkCheckbox} />
                   </div>
                   <div>
                       <div className={Style.label}>
@@ -158,7 +212,7 @@ class Message extends React.Component {
                           <input ref={this.phoneCheckboxInput} type="checkbox" className={Style.checkbox} name="contact" value="phone" />
                           <label>Twój Numer telefonu:</label>
                       </div>
-                      <input ref={this.phoneInput} type="text" placeholder="Numer telefonu" />
+                      <input ref={this.phoneInput} type="text" placeholder="Numer telefonu" data="phone" onInput={this.checkCheckbox} />
                   </div>
               </div>
               <div className={Style.horizontal}>

@@ -24,6 +24,7 @@ class Gallery extends React.Component {
       resp => resp.json()
     )
     .then(resp => this.setState({ photos: resp}))
+    .catch(e => console.log(e))
     .finally(r => {
       console.log("end of loading");
       this.setState({loading:false})
