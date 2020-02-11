@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.eschenholz.api.entity.Photo;
 import pl.eschenholz.api.enums.PhotoCategory;
-import pl.eschenholz.api.repository.PhotoRepo;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

@@ -1,9 +1,13 @@
 package pl.eschenholz.api.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.eschenholz.api.entity.Photo;
+import pl.eschenholz.api.service.FileSystemStorageService;
 import pl.eschenholz.api.service.PhotoService;
+import pl.eschenholz.api.service.StorageService;
 
 import java.util.Optional;
 
@@ -15,6 +19,14 @@ public class PhotoController {
 
     @Autowired
     private PhotoService service;
+
+
+    private final FileSystemStorageService storageService;
+
+    @Autowired
+    public PhotoController(FileSystemStorageService storageService) {
+        this.storageService = storageService;
+    }
 
 
     @GetMapping("/photo")
@@ -46,9 +58,10 @@ public class PhotoController {
         return service.findById(id);
     }
 
-    @PutMapping("/photo")
-    public Photo insertPhoto(@RequestBody Photo p){
-        return service.save(p);
+    @PutMapping(value = "/photo")
+    public Photo insertPhoto(@RequestBody Photo photo,@RequestParam MultipartFile multifile){
+        storageService.store(multifile);
+        return service.save(photo);
     }
 
     @PostMapping("/photo")
@@ -61,8 +74,4 @@ public class PhotoController {
         service.delete(p);
     }
 
-    /*@PutMapping("/photo/save-file")
-    public Photo savePhotoFile(){
-
-    }*/
 }

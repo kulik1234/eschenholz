@@ -18,9 +18,9 @@ public class ContactFormService extends MainService<ContactForm, ContactFormRepo
     @Autowired
     CustomerRepo cRepo;
 
-    public ContactForm save(ContactForm c,String name,String email,String phone){
+    public ContactForm save(ContactForm c){
         String[] a = new String[2];
-        String[] nameAndSurname = name.toString().trim().split("[ ]+");
+        String[] nameAndSurname = c.getCustomerName().toString().trim().split("[ ]+");
         if(nameAndSurname.length<2){
             a[1]="";
             a[0]=nameAndSurname[0];
@@ -33,8 +33,8 @@ public class ContactFormService extends MainService<ContactForm, ContactFormRepo
                 null,
                 a[0],
                 a[1],
-                email,
-                phone, null));
+                c.getCustomerEmail(),
+                c.getCustomerPhone(), null));
         c.setStatus(ContactFormStatus.NEW);
         c.setCustomerId(customer.getId());
         return repo.save(c);

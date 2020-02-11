@@ -6,7 +6,8 @@ class Dropzone extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { hightlight: false }
+        this.state = { hightlight: false
+        }
         this.fileInputRef = React.createRef();
         this.openFileDialog = this.openFileDialog.bind(this);
         this.onFilesAdded = this.onFilesAdded.bind(this);
@@ -46,16 +47,16 @@ class Dropzone extends React.Component {
         this.setState({ hightlight: false });
       }
       onDrop(event) {
-        event.preventDefault();
-      
-        if (this.props.disabled) return;
-      
-        const files = event.dataTransfer.files;
+        event.preventDefault()
+    
+        if (this.props.disabled) return
+    
+        const files = event.dataTransfer.files
         if (this.props.onFilesAdded) {
-          const array = this.fileListToArray(files);
+          const array = this.fileListToArray(files)
+          this.props.onFilesAdded(array)
         }
-        this.setState({ hightlight: false });
-        console.log(this.props.disabled);
+        this.setState({ hightlight: false })
       }
 
     render() {
@@ -81,7 +82,7 @@ class Dropzone extends React.Component {
                     onChange={this.onFilesAdded}
                     accept="image/*"
                 />
-                <span>Upload Files</span>
+                <span>Wyślij pliki</span>
             </div>
         );
     }

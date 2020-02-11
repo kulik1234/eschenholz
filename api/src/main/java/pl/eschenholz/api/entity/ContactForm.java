@@ -25,11 +25,20 @@ public class ContactForm extends Base{
 
     private ContactFormStatus status;
 
+    @Transient
+    private String customerName;
+
+    @Transient
+    private String customerEmail;
+
+    @Transient
+    private String customerPhone;
+
 
     public ContactForm() {
     }
 
-    public ContactForm(Long id, String subject, Boolean ifEmail, Boolean ifPhone, String content, Long customerId,ContactFormStatus status) {
+    public ContactForm(Long id, String subject, Boolean ifEmail, Boolean ifPhone, @NotNull String content, Long customerId, ContactFormStatus status, String customerName, String customerEmail, String customerPhone) {
         this.id = id;
         this.subject = subject;
         this.ifEmail = ifEmail;
@@ -37,8 +46,10 @@ public class ContactForm extends Base{
         this.content = content;
         this.customerId = customerId;
         this.status = status;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+        this.customerPhone = customerPhone;
     }
-
 
     public Long getId() {
         return id;
@@ -94,5 +105,29 @@ public class ContactForm extends Base{
 
     public void setStatus(ContactFormStatus status) {
         this.status = status;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
     }
 }

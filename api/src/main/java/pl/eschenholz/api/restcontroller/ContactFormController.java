@@ -51,21 +51,17 @@ public class ContactFormController //extends BaseController<ContactForm,ContactF
 
     @PutMapping("/contact-form")
     @CrossOrigin
-    public ContactForm insertCustomer(@RequestBody ContactForm p,
-                                      @RequestParam(defaultValue = "") String name,
-                                      @RequestParam(defaultValue = "") String email,
-                                      @RequestParam(defaultValue = "") String phone
-    ){
-        return service.save(p,name,email,phone);
+    public ContactForm insert(@RequestBody ContactForm c){
+        return service.save(c);
     }
 
     @PostMapping("/contact-form")
-    public ContactForm updateCustomer(@RequestBody ContactForm p){
+    public ContactForm update(@RequestBody ContactForm p){
         return service.findById(p.getId()).orElse(service.save(p));
     }
 
     @DeleteMapping("/contact-form")
-    public void removeCustomer(@RequestBody ContactForm p){
+    public void remove(@RequestBody ContactForm p){
         service.delete(p);
     }
 

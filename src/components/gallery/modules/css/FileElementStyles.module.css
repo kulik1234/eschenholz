@@ -1,0 +1,29 @@
+.main {
+    margin: 5px;
+    display: flex;
+    position: relative;
+    
+}
+.fl1 {
+    flex: 1;
+    z-index: 1;
+    font-size: 0.8em;
+    padding: 0.4em;
+    place-content: center;
+}
+.x {
+    padding: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 1;
+}
+.main > progress {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+}
