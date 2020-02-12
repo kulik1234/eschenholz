@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Style from './css/MessageStyles.module.css';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 import messages from '../../../messages/messages';
@@ -32,7 +32,8 @@ class Message extends React.Component {
         this.hideLoadingScreen = this.hideLoadingScreen.bind(this);
         this.showWarnings = this.showWarnings.bind(this);
         this.checkCheckbox = this.checkCheckbox.bind(this);
-        
+        this.updateCounter = this.updateCounter.bind(this);
+        this.counter = React.createRef();
 
       }
 
@@ -73,13 +74,14 @@ class Message extends React.Component {
     sendMessage() {
         
         var obj = {
-            'name':this.nameInput.current.value.trim(),
-            'email':this.emailInput.current.value.trim(),
-            'phone':this.phoneInput.current.value.trim(),
+            'customerName':this.nameInput.current.value.trim(),
+            'customerEmail':this.emailInput.current.value.trim(),
+            'customerPhone':this.phoneInput.current.value.trim().split(" ").join(""),
             'subject':this.subjectInput.current.value.trim(),
             'ifEmail':this.emailCheckboxInput.current.checked?1:0,
             'ifPhone':this.phoneCheckboxInput.current.checked?1:0,
-            'content':this.readContent()
+            'content':this.readContent().trim(),
+
         };
         this.setState(
             {"message":obj}
@@ -104,6 +106,7 @@ class Message extends React.Component {
             } )
             .then(resp => {
                 this.setState({data:resp});
+                this.showWarnings(["Wiadomość wysłana"]);
             })
             .catch(err => {
                 console.log(err);
@@ -112,6 +115,7 @@ class Message extends React.Component {
             .finally(r=>{
                 this.setState({loading:false});  
                 this.hideLoadingScreen();  
+                
             })
         }
         else {
@@ -142,7 +146,7 @@ class Message extends React.Component {
         var warnings= [];
         var errorCount = 0;
 
-        if(!messages.POLISH_CHARS_REGEXP_50.test(obj.name)){
+        if(!messages.POLISH_CHARS_REGEXP_50.test(obj.customerName)){
             warnings.push(messages.WRONG_NAME_AND_SURNAME);
             errorCount++;
         }
@@ -157,14 +161,14 @@ class Message extends React.Component {
         let true1 = false;
         let true2 = false;
         if(obj.ifEmail) {
-            if(messages.EMAIL_REGEXP.test(obj.email))
+            if(messages.EMAIL_REGEXP.test(obj.customerEmail))
                 true1 = true;
         }
         else {
             true1 = true;
         }
         if(obj.ifPhone){
-            if(/^[0-9]{9}$/.test(obj.phone))
+            if(/^[0-9]{9}$/.test(obj.customerPhone))
                  true2 = true;
         
         }
@@ -185,6 +189,9 @@ class Message extends React.Component {
         if(errorCount)        
         return false;
         else return true;
+    }
+    updateCounter(e){
+       this.counter.current.innerHTML = this.messageBody.current.textContent.length;
     }
 
     render() {
@@ -221,7 +228,12 @@ class Message extends React.Component {
                       <input ref={this.subjectInput} type="text" placeholder="Temat wiadomości" />
                   </div>
               </div>
-              <div contentEditable className={Style.textarea} ref={this.messageBody}></div>
+              <div className={Style.textareaParent}>
+                  <div contentEditable className={Style.textarea} ref={this.messageBody} onKeyPress={this.updateCounter} onKeyUp={this.updateCounter}>
+                  </div>
+                <div className={Style.counter}><span ref={this.counter??0}>0</span>/250</div>
+              </div>
+              
               <div className={Style.horizontal}>
                   <div className={Style.buttonContainer}>
                       <button className={Style.button} onClick={this.sendMessage}>Wyslij wiadomosc</button>

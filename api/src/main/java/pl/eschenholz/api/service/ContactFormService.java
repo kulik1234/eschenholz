@@ -19,20 +19,10 @@ public class ContactFormService extends MainService<ContactForm, ContactFormRepo
     CustomerRepo cRepo;
 
     public ContactForm save(ContactForm c){
-        String[] a = new String[2];
-        String[] nameAndSurname = c.getCustomerName().toString().trim().split("[ ]+");
-        if(nameAndSurname.length<2){
-            a[1]="";
-            a[0]=nameAndSurname[0];
-        }
-        else {
-            a[0]=nameAndSurname[0];
-            a[1]=nameAndSurname[1];
-        }
         Customer customer = cRepo.save(new Customer(
                 null,
-                a[0],
-                a[1],
+                c.getCustomerName(),
+                c.getCustomerName(),
                 c.getCustomerEmail(),
                 c.getCustomerPhone(), null));
         c.setStatus(ContactFormStatus.NEW);

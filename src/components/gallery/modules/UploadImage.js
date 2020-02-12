@@ -2,6 +2,7 @@ import React from 'react';
 import Dropzone from './Dropzone';
 import Style from './css/UploadImageStyles.module.css';
 import FileElement from './FileElement';
+import config from '../../../messages/messages';
 
 class UploadImage extends React.Component {
   constructor(props) {
@@ -16,7 +17,6 @@ class UploadImage extends React.Component {
     this.onFilesAdded = this.onFilesAdded.bind(this);
     this.uploadFiles = this.uploadFiles.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
-    this.renderActions = this.renderActions.bind(this);
     this.clearFileList = this.clearFileList.bind(this);
     this.removeFile = this.removeFile.bind(this);
   }
@@ -34,7 +34,7 @@ class UploadImage extends React.Component {
       });
       try {
         await Promise.all(promises);
-    
+        
         this.setState({ successfullUploaded: true, uploading: false });
       } catch (e) {
         // Not Production ready! Do some error handling here instead...
@@ -44,7 +44,7 @@ class UploadImage extends React.Component {
     sendRequest(file) {
       return new Promise((resolve, reject) => {
        const req = new XMLHttpRequest();
-     
+       req.open("PUT", config.HOST+"/api/photo");
        req.upload.addEventListener("progress", event => {
         if (event.lengthComputable) {
          const copy = { ...this.state.uploadProgress };
@@ -72,26 +72,34 @@ class UploadImage extends React.Component {
      
        const formData = new FormData();
        formData.append("file", file, file.name);
-     
-       req.open("POST", "http://localhost:8000/upload");
+       formData.append("nameOrTitle","test");
+       formData.append("path","/uploaded");
+       formData.append("descritpion","to jest zdjecie testowe");
+       formData.append("author","tester");
+       formData.append("category",1);
+       formData.append("date","1999-12-24T12:00:00");
        req.send(formData);
       });
      }
-    renderActions(){}
     clearFileList(){
-      this.setState({files: []});
+      this.setState({files: [],successfullUploaded: false});
     }
     removeFile(e){
-      let t = e.target;
-      let newList = [];
+      const t = e.target;
+      const newList = [];
+      
       if(t.getAttribute("name")==="close"){
           this.state.files.forEach(el => {
             if(el.name != t.getAttribute("value"))
             newList.push(el);
           })
           this.setState({files: newList});
+          if(newList.length < 1){
+            this.setState({files: [],successfullUploaded: false});
+          }
       }
     }
+
 
     render() {
       return (
@@ -101,10 +109,10 @@ class UploadImage extends React.Component {
               disabled={this.state.uploading || this.state.successfullUploaded} />
           <div className={Style.vertical}>
             <div className={Style.full} onClick={this.removeFile}>
-            {this.state.files.map((i,k)=><FileElement value={i.name} sendProgress={0} key={k}/>)}
+            {this.state.files.map((i,k)=><FileElement value={i.name} sendProgress={this.state.uploadProgress[i.name]?this.state.uploadProgress[i.name].percentage : 0} key={k}/>)}
               </div>
               <div className={Style.center+" "+Style.main}>
-                <button onClick={this.clearFileList}>Wyczysc</button><button>Wyslij</button>
+                <button onClick={this.clearFileList}>Wyczysc</button><button onClick={this.uploadFiles}>Wyslij</button>
               </div>
           </div>
         </div>

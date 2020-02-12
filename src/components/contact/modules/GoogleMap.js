@@ -7,6 +7,13 @@ const mapStyles = {
     height: '600px'
   };
   
+  const mainStyle = {
+    position: 'relative',
+    overflow: 'hidden',
+    height: '600px',
+    width: '1000px',
+    margin: '10px auto 0px'
+  } //"position:relative;overflow:hidden;height:600px;width:1000px;margin:10px auto 0px;"
 
 export class GoogleMap extends React.Component {
     state = {
@@ -38,7 +45,7 @@ export class GoogleMap extends React.Component {
               <div>
                   <p>Zobacz gdzie znajduje się siedziba firmy</p>
               </div>
-        <div id="google-map" Style="position:relative;overflow:hidden;height:600px;width:1000px;margin:10px auto 0px;">
+        <div id="google-map" style={mainStyle}>
             <Map
                   google={this.props.google}
                   zoom={16}
