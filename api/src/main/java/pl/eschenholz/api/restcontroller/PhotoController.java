@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.eschenholz.api.entity.Photo;
+import pl.eschenholz.api.enums.PhotoCategory;
 import pl.eschenholz.api.service.FileSystemStorageService;
 import pl.eschenholz.api.service.PhotoService;
 import pl.eschenholz.api.service.StorageService;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -59,9 +63,20 @@ public class PhotoController {
     }
 
     @PutMapping(value = "/photo")
-    public Photo insertPhoto(@RequestBody Photo photo,@RequestParam MultipartFile multifile){
-        storageService.store(multifile);
-        return service.save(photo);
+    @CrossOrigin
+    public Photo insertPhoto(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("nameOrTitle") String nameOrTitle,
+            @RequestParam("descritpion") String descritpion,
+            @RequestParam("path") String path,
+            @RequestParam("author") String author,
+            @RequestParam("category") int category,
+            @RequestParam("date") String date
+    ){
+        String fileName = storageService.store(file);
+        LocalDateTime time = LocalDateTime.parse(date);
+        Photo photo = new Photo(null,nameOrTitle,path+"/"+fileName,descritpion,author,PhotoCategory.values()[category],time);
+       return service.save(photo);
     }
 
     @PostMapping("/photo")
