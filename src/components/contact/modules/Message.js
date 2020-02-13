@@ -12,6 +12,8 @@ class Message extends React.Component {
         super(props);
         this.state = {
             loadingScreen: false,
+            loadingScreenMessage: "",
+            loadingScreenType: "loading",
             loading: false,
             data: [],
             loadingErrors: []
@@ -28,8 +30,6 @@ class Message extends React.Component {
         this.warnings = React.createRef();
         this.readContent = this.readContent.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-        this.showLoadingScreen = this.showLoadingScreen.bind(this);
-        this.hideLoadingScreen = this.hideLoadingScreen.bind(this);
         this.showWarnings = this.showWarnings.bind(this);
         this.checkCheckbox = this.checkCheckbox.bind(this);
         this.updateCounter = this.updateCounter.bind(this);
@@ -91,7 +91,7 @@ class Message extends React.Component {
             this.checkInputs(obj)
         )
         {  
-            this.showLoadingScreen();  
+            this.setState({loadingScreen: true});
             this.setState({loading:true});       
             fetch(messages.HOST+"/api/contact-form?name="+obj.name+"&email="+obj.email+"&phone="+obj.phone,{
                 method: 'PUT',
@@ -105,16 +105,15 @@ class Message extends React.Component {
                 console.log(resp.json);
             } )
             .then(resp => {
-                this.setState({data:resp});
+                this.setState({data:resp,loadingScreenType: "success"});
                 this.showWarnings(["Wiadomość wysłana"]);
             })
             .catch(err => {
                 console.log(err);
-                this.setState({loadingErrors : err});
+                this.setState({loadingErrors : err,loadingScreenType: "error",loadingScreenMessage: "wystąpił błąd"});
             })
             .finally(r=>{
-                this.setState({loading:false});  
-                this.hideLoadingScreen();  
+                //this.setState({loading:false});  
                 
             })
         }
@@ -126,12 +125,6 @@ class Message extends React.Component {
         
     }
 
-    showLoadingScreen(){
-        this.setState({loadingScreen: true});
-    }
-    hideLoadingScreen(){
-        this.setState({loadingScreen: false});
-    }
     showWarnings(warnings){
         this.warnings.current.innerHTML = "";
         for(let b of warnings){
@@ -150,7 +143,7 @@ class Message extends React.Component {
             warnings.push(messages.WRONG_NAME_AND_SURNAME);
             errorCount++;
         }
-        if(!/.{5,250}/.test(obj.content)){
+        if(!/^.{5,250}$/.test(obj.content)){
             warnings.push(messages.WRONG_CONTENT);
             errorCount++;
         }
@@ -191,11 +184,19 @@ class Message extends React.Component {
         else return true;
     }
     updateCounter(e){
-       this.counter.current.innerHTML = this.messageBody.current.textContent.length;
+        let i = this.messageBody.current.textContent.length
+       this.counter.current.innerHTML = i;
+       if(i>250){
+            this.counter.current.parentNode.classList.add(Style.counterRed);
+       }
+       else {
+        this.counter.current.parentNode.classList.remove(Style.counterRed);
+       }
+
     }
 
     render() {
-        const loadingScreen = this.state.loadingScreen ? (<LoadingScreen/>):null;
+        const loadingScreen = this.state.loadingScreen ? (<LoadingScreen type={this.state.loadingScreenType} content={this.state.loadingScreenMessage}/>):null;
       return (
           <div className={Style.main + " " + Style.vertical}>
               <div ref={this.warnings} className={Style.vertical + " "+ Style.warnings}>
@@ -231,7 +232,7 @@ class Message extends React.Component {
               <div className={Style.textareaParent}>
                   <div contentEditable className={Style.textarea} ref={this.messageBody} onKeyPress={this.updateCounter} onKeyUp={this.updateCounter}>
                   </div>
-                <div className={Style.counter}><span ref={this.counter??0}>0</span>/250</div>
+                <div className={Style.counter}><span ref={this.counter}>0</span>/250</div>
               </div>
               
               <div className={Style.horizontal}>

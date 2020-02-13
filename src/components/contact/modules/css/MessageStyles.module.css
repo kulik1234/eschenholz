@@ -6,7 +6,7 @@
 }
 .textarea {
     height: 160px;
-    width: 780px;
+    width: 786px;
     background-color: #fff;
     padding: 7px;
     overflow: auto;
@@ -25,6 +25,9 @@
     right: 5px;
     font-size: 0.8em;
     color: #0008;
+}
+.counterRed {
+    color: #f00c;
 }
 
 .horizontal {
