@@ -2,6 +2,7 @@ import React from 'react';
 import Style from './css/MainContactStyles.module.css';
 import Item from './modules/Item';
 import Message from './modules/Message';
+import GoogleMap from './modules/GoogleMap';
 
 const col1 = ["ulica","kod pocztowy"];
 const col2 = ["Imie","nazwisko","telefon"];
@@ -15,6 +16,7 @@ class Contact extends React.Component {
       return (
         <div className={Style.main}>
           <div className={Style.background}>
+            <GoogleMap />
             <div className={Style.container}>
               <div className={Style.subcontainer}>
                 <Item label="adres firmy" bolded="1" key="0" />

@@ -2,6 +2,7 @@ package pl.eschenholz.api.entity;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -12,8 +13,10 @@ public class Customer extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String name;
 
+    @NotNull
     private String surname;
 
     private String email;
@@ -29,14 +32,13 @@ public class Customer extends Base {
     public Customer() {
     }
 
-    public Customer(Long id, String name, String surname, String email, String phone, String address,Set<ContactForm> contactForm) {
+    public Customer(Long id, String name, String surname, String email, String phone, String address) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.contactForm = contactForm;
     }
 
     public Long getId() {

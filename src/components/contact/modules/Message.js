@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Style from './css/MessageStyles.module.css';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
-
+import messages from '../../../messages/messages';
 
 
 
@@ -10,23 +10,49 @@ class Message extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {loadingScreen: false};
+        this.state = {
+            loadingScreen: false,
+            loadingScreenMessage: "",
+            loadingScreenType: "loading",
+            loading: false,
+            data: [],
+            loadingErrors: []
+        
+        };
         this.nameInput = React.createRef();
         this.emailInput = React.createRef();
-        this.topicInput = React.createRef();
+        this.subjectInput = React.createRef();
         this.phoneInput = React.createRef();
         this.loading = React.createRef();
         this.emailCheckboxInput = React.createRef();
         this.phoneCheckboxInput = React.createRef();
         this.messageBody = React.createRef();
+        this.warnings = React.createRef();
         this.readContent = this.readContent.bind(this);
-        this.phone = this.phone.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
-        this.showLoadingScreen = this.showLoadingScreen.bind(this);
-        this.hideLoadingScreen = this.hideLoadingScreen.bind(this);
-
+        this.showWarnings = this.showWarnings.bind(this);
+        this.checkCheckbox = this.checkCheckbox.bind(this);
+        this.updateCounter = this.updateCounter.bind(this);
+        this.counter = React.createRef();
 
       }
+
+      checkCheckbox(e){
+          let input;
+          if(e.target.getAttribute("data") === "email")
+            {input = this.emailCheckboxInput.current;}
+            else
+            {input = this.phoneCheckboxInput.current;}
+          if(!e.target.value == ""){
+            input.checked = true;
+          }
+          else {
+              input.checked = false;
+          }
+      }
+      
+
+
     readContent(){
         var value = "";
         if (this.messageBody.current.children.length > 1) {
@@ -46,57 +72,142 @@ class Message extends React.Component {
 
 
     sendMessage() {
-        this.showLoadingScreen();
-        var resp = fetch("http://localhost:8080/api/contact-form",{
-            method: 'POST',
-            headers: {
-                'Accept':'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'name':this.nameInput.current.value,
-                'email':this.emailInput.current.value,
-                'phone':this.phoneInput.current.value,
-                'topic':this.topicInput.current.value,
-                'byEmail':this.emailCheckboxInput.current.value,
-                'byPhone':this.phoneCheckboxInput.current.value,
-                'content':this.readContent()
-            })
-        })
-        .then(resp => console.log(resp.json) )
-        .catch(r => console.log(r))
-        .finally(this.hideLoadingScreen());
         
-        /*console.log(JSON.stringify({
-            'name':this.nameInput.current.value,
-            'email':this.emailInput.current.value,
-            'phone':this.phoneInput.current.value,
-            'topic':this.topicInput.current.value,
-            'byEmail':this.emailCheckboxInput.current.checked?1:0,
-            'byPhone':this.phoneCheckboxInput.current.checked?1:0,
-            'content':this.readContent()
-        }));*/
+        var obj = {
+            'customerName':this.nameInput.current.value.trim(),
+            'customerEmail':this.emailInput.current.value.trim(),
+            'customerPhone':this.phoneInput.current.value.trim().split(" ").join(""),
+            'subject':this.subjectInput.current.value.trim(),
+            'ifEmail':this.emailCheckboxInput.current.checked?1:0,
+            'ifPhone':this.phoneCheckboxInput.current.checked?1:0,
+            'content':this.readContent().trim(),
+
+        };
+        this.setState(
+            {"message":obj}
+         );
+
+        if(
+            this.checkInputs(obj)
+        )
+        {  
+            this.setState({loadingScreen: true});
+            this.setState({loading:true});       
+            fetch(messages.HOST+"/api/contact-form?name="+obj.name+"&email="+obj.email+"&phone="+obj.phone,{
+                method: 'PUT',
+                headers: {
+                    'Accept':'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(obj)
+            })
+            .then(resp => {
+                console.log(resp.json);
+            } )
+            .then(resp => {
+                this.setState({data:resp,loadingScreenType: "success"});
+                this.showWarnings(["Wiadomość wysłana"]);
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({loadingErrors : err,loadingScreenType: "error",loadingScreenMessage: "wystąpił błąd"});
+            })
+            .finally(r=>{
+                //this.setState({loading:false});  
+                
+            })
+        }
+        else {
+            console.log("wpisano niepoprawne dane");
+            console.log(JSON.stringify(obj));
+        }
+        
+        
     }
 
-    showLoadingScreen(){
-        this.setState({loadingScreen: true});
-    }
-    hideLoadingScreen(){
-        this.setState({loadingScreen: false});
+    showWarnings(warnings){
+        this.warnings.current.innerHTML = "";
+        for(let b of warnings){
+            var div = document.createElement("div");
+            div.appendChild(document.createTextNode(b));
+            this.warnings.current.appendChild(div);
+        }
+
     }
 
+    checkInputs(obj){
+        var warnings= [];
+        var errorCount = 0;
+
+        if(!messages.POLISH_CHARS_REGEXP_50.test(obj.customerName)){
+            warnings.push(messages.WRONG_NAME_AND_SURNAME);
+            errorCount++;
+        }
+        if(!/^.{5,250}$/.test(obj.content)){
+            warnings.push(messages.WRONG_CONTENT);
+            errorCount++;
+        }
+        if(!messages.POLISH_CHARS_REGEXP_50.test(obj.subject)){
+            warnings.push(messages.WRONG_SUBJECT);
+            errorCount++;
+        }
+        let true1 = false;
+        let true2 = false;
+        if(obj.ifEmail) {
+            if(messages.EMAIL_REGEXP.test(obj.customerEmail))
+                true1 = true;
+        }
+        else {
+            true1 = true;
+        }
+        if(obj.ifPhone){
+            if(/^[0-9]{9}$/.test(obj.customerPhone))
+                 true2 = true;
+        
+        }
+        else {
+            true2 = true;
+        }
+        if(
+            !(true1 && true2&&(obj.ifEmail||obj.ifPhone))
+        )
+        {
+            warnings.push(messages.WRONG_CONTACT);
+            errorCount++;
+        }
+
+        this.showWarnings(warnings);
+
+        
+        if(errorCount)        
+        return false;
+        else return true;
+    }
+    updateCounter(e){
+        let i = this.messageBody.current.textContent.length
+       this.counter.current.innerHTML = i;
+       if(i>250){
+            this.counter.current.parentNode.classList.add(Style.counterRed);
+       }
+       else {
+        this.counter.current.parentNode.classList.remove(Style.counterRed);
+       }
+
+    }
 
     render() {
-        const loadingScreen = this.state.loadingScreen ? (<LoadingScreen/>):null;
+        const loadingScreen = this.state.loadingScreen ? (<LoadingScreen type={this.state.loadingScreenType} content={this.state.loadingScreenMessage}/>):null;
       return (
           <div className={Style.main + " " + Style.vertical}>
+              <div ref={this.warnings} className={Style.vertical + " "+ Style.warnings}>
+              </div>
               <div className={Style.horizontal}>
                   <div>
                       <div className={Style.label}>
                           <input ref={this.emailCheckboxInput} type="checkbox" className={Style.checkbox} name="contact" value="email" />
                           <label>Twój adres email:</label>
                       </div>
-                      <input ref={this.emailInput} type="text" placeholder="Adres email" />
+                      <input ref={this.emailInput} type="text" placeholder="Adres email" data="email" onInput={this.checkCheckbox} />
                   </div>
                   <div>
                       <div className={Style.label}>
@@ -109,16 +220,21 @@ class Message extends React.Component {
                           <input ref={this.phoneCheckboxInput} type="checkbox" className={Style.checkbox} name="contact" value="phone" />
                           <label>Twój Numer telefonu:</label>
                       </div>
-                      <input ref={this.phoneInput} type="text" placeholder="Numer telefonu" />
+                      <input ref={this.phoneInput} type="text" placeholder="Numer telefonu" data="phone" onInput={this.checkCheckbox} />
                   </div>
               </div>
               <div className={Style.horizontal}>
                   <div>
                       <div className={Style.label + " " + Style.messageTopic}>Temat wiadomości:</div>
-                      <input ref={this.topicInput} type="text" placeholder="Temat wiadomości" />
+                      <input ref={this.subjectInput} type="text" placeholder="Temat wiadomości" />
                   </div>
               </div>
-              <div contentEditable className={Style.textarea} ref={this.messageBody}></div>
+              <div className={Style.textareaParent}>
+                  <div contentEditable className={Style.textarea} ref={this.messageBody} onKeyPress={this.updateCounter} onKeyUp={this.updateCounter}>
+                  </div>
+                <div className={Style.counter}><span ref={this.counter}>0</span>/250</div>
+              </div>
+              
               <div className={Style.horizontal}>
                   <div className={Style.buttonContainer}>
                       <button className={Style.button} onClick={this.sendMessage}>Wyslij wiadomosc</button>

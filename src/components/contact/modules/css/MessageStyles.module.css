@@ -5,13 +5,29 @@
     padding: 15px;
 }
 .textarea {
-    height: 200px;
-    width: 800px;
-    border: 1px solid;
+    height: 160px;
+    width: 786px;
     background-color: #fff;
     padding: 7px;
     overflow: auto;
+}
+.textareaParent {
+    height: 200px;
+    width: 800px;
     margin: 10px auto 0px;
+    position: relative;
+    border: 1px solid;
+    background-color: white;
+}
+.counter {
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+    font-size: 0.8em;
+    color: #0008;
+}
+.counterRed {
+    color: #f00c;
 }
 
 .horizontal {
@@ -48,4 +64,17 @@
 }
 .displayNone {
     display: none;
+}
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+.warnings {
+    color: red;
+    font-size: 0.9em;
+    margin: 5px;
+    text-align: center;
+}
+.warnings > div{
+    padding: 5px;
 }

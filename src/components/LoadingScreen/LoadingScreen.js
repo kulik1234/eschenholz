@@ -28,15 +28,20 @@ class LoadingScreen extends React.Component {
       }
 
     render() {
+      let content = <div className={Style.animation}>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>;
+        if(this.props.type === "error")
+    content = <div className={Style.error}>wystapił błąd{this.props.content!=""&&this.props.content!=undefined?": "+this.props.content:""}</div>;
+        if(this.props.type === "success")
+        content = <div className={Style.success}>Wiadomość została wysłana</div>;
         const screen = 
         <div className={Style.main}>
-            <div className={Style.animation}>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+            {content}
         </div>;
       return (
         ReactDOM.createPortal(screen,this.el)

@@ -1,0 +1,26 @@
+.main {
+    padding: 5px;
+    display: flex;
+}
+.vertical {
+    margin: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 0px;
+    width: 300px;
+    height: 200px;
+    
+}
+.full {
+    flex: 1;
+    overflow: auto;
+    border: 1px solid #0003;
+    padding: 3px;
+}
+.center {
+    align-items: center;
+    place-items: center;
+}
+.main button {
+    margin: auto;
+}
