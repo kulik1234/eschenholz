@@ -143,7 +143,7 @@ class Message extends React.Component {
             warnings.push(messages.WRONG_NAME_AND_SURNAME);
             errorCount++;
         }
-        if(!/^.{5,250}$/.test(obj.content)){
+        if(!/^.{5,250}$/.test(this.messageBody.current.textContent)){
             warnings.push(messages.WRONG_CONTENT);
             errorCount++;
         }
