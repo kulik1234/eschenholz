@@ -1,6 +1,7 @@
 package pl.eschenholz.api.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import pl.eschenholz.api.ApiApplication;
 
 @ConfigurationProperties("storage")
 public class StorageProperties {
@@ -8,7 +9,7 @@ public class StorageProperties {
     /**
      * Folder location for storing files
      */
-    private String location = "upload-dir";
+    private String location = ApiApplication.class.getProtectionDomain().getCodeSource().getLocation().getPath().toString()+"../../../public/uploaded";
 
     public String getLocation() {
         return location;

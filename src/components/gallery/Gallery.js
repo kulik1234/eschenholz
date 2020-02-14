@@ -4,6 +4,7 @@ import GalleryImage from './modules/GalleryImage';
 import Style from './css/MainGalleryStyles.module.css'
 import config from '../../messages/messages';
 
+
 class Gallery extends React.Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,8 @@ class Gallery extends React.Component {
         photos: [],
         loading: false
       };
-    
+
+    this.addPhoto = this.addPhoto.bind(this);
 
   }
 
@@ -31,17 +33,25 @@ class Gallery extends React.Component {
   });
   }
 
-
+  addPhoto(photo){
+    console.log(photo);
+     let tab = this.state.photos;
+    tab.push(photo);
+    this.setState({photos: tab});
+    
+  }
 
     render() {
-      console.log(this.state);
+
       return (
         <div className={Style.main}>
+          
           {this.state.loading?"loading...":""}
          <div className={Style.imageContainer}>
          {this.state.photos.map((i,k) => <GalleryImage src={i.path} key={k} alt={k}/>)}
          </div>
-         <UploadImage />
+         <UploadImage newphoto={this.addPhoto}/>
+         
         </div>
       );
     }

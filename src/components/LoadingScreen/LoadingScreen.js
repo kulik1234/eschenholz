@@ -39,7 +39,7 @@ class LoadingScreen extends React.Component {
         if(this.props.type === "error")
     content = <div className={Style.error}>
       <X />
-      wystapił błąd{this.props.content!=""&&this.props.content!=undefined?": "+this.props.content:""}
+      wystapił błąd{this.props.content!==""&&this.props.content!==undefined?": "+this.props.content:""}
       </div>;
         if(this.props.type === "success")
         content = <div className={Style.success}><X />Wiadomość została wysłana</div>;

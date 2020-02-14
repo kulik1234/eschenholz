@@ -11,7 +11,8 @@ class UploadImage extends React.Component {
       files: [],
       uploading: false,
       uploadProgress: {},
-      successfullUploaded: false
+      successfullUploaded: false,
+      responsePhoto: {}
     };
 
     this.onFilesAdded = this.onFilesAdded.bind(this);
@@ -19,6 +20,7 @@ class UploadImage extends React.Component {
     this.sendRequest = this.sendRequest.bind(this);
     this.clearFileList = this.clearFileList.bind(this);
     this.removeFile = this.removeFile.bind(this);
+    this.addPhotoUp = this.props.newphoto.bind(this);
   }
     onFilesAdded(files) {
       this.setState(prevState => ({
@@ -30,7 +32,9 @@ class UploadImage extends React.Component {
       this.setState({ uploadProgress: {}, uploading: true });
       const promises = [];
       this.state.files.forEach(file => {
-        promises.push(this.sendRequest(file));
+        let p = this.sendRequest(file);
+        p.then(p=>p.onloadend=(e)=>{this.addPhotoUp(JSON.parse(e.explicitOriginalTarget.responseText))});
+        promises.push(p);
       });
       try {
         await Promise.all(promises);
@@ -60,16 +64,16 @@ class UploadImage extends React.Component {
         const copy = { ...this.state.uploadProgress };
         copy[file.name] = { state: "done", percentage: 100 };
         this.setState({ uploadProgress: copy });
-        resolve(req.response);
+        resolve(req);
        });
         
        req.upload.addEventListener("error", event => {
         const copy = { ...this.state.uploadProgress };
         copy[file.name] = { state: "error", percentage: 0 };
         this.setState({ uploadProgress: copy });
-        reject(req.response);
+        reject(req);
        });
-     
+       
        const formData = new FormData();
        formData.append("file", file, file.name);
        formData.append("nameOrTitle","test");
@@ -80,6 +84,7 @@ class UploadImage extends React.Component {
        formData.append("date","1999-12-24T12:00:00");
        req.send(formData);
       });
+      
      }
     clearFileList(){
       this.setState({files: [],successfullUploaded: false});
@@ -90,7 +95,7 @@ class UploadImage extends React.Component {
       
       if(t.getAttribute("name")==="close"){
           this.state.files.forEach(el => {
-            if(el.name != t.getAttribute("value"))
+            if(el.name !== t.getAttribute("value"))
             newList.push(el);
           })
           this.setState({files: newList});
@@ -99,6 +104,8 @@ class UploadImage extends React.Component {
           }
       }
     }
+
+    
 
 
     render() {
@@ -109,10 +116,15 @@ class UploadImage extends React.Component {
               disabled={this.state.uploading || this.state.successfullUploaded} />
           <div className={Style.vertical}>
             <div className={Style.full} onClick={this.removeFile}>
-            {this.state.files.map((i,k)=><FileElement value={i.name} sendProgress={this.state.uploadProgress[i.name]?this.state.uploadProgress[i.name].percentage : 0} key={k}/>)}
+            {this.state.files.map((i,k)=>
+            <FileElement 
+            value={i.name} 
+            sendProgress={this.state.uploadProgress[i.name]?this.state.uploadProgress[i.name].percentage : 0} 
+            key={k}
+            />)}
               </div>
               <div className={Style.center+" "+Style.main}>
-                <button onClick={this.clearFileList}>Wyczysc</button><button onClick={this.uploadFiles}>Wyslij</button>
+            <button onClick={this.clearFileList}>Wyczysc</button><button onClick={this.uploadFiles}>Wyslij</button>
               </div>
           </div>
         </div>

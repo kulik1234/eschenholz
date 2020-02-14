@@ -10,8 +10,10 @@ import pl.eschenholz.api.configuration.StorageProperties;
 import pl.eschenholz.api.exception.StorageException;
 import pl.eschenholz.api.exception.StorageFileNotFoundException;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,9 +25,11 @@ public class FileSystemStorageService implements StorageService {
 
     private final Path rootLocation;
 
-    //@Autowired
+    private StorageProperties props;
+
     public FileSystemStorageService() {
-        this.rootLocation = Paths.get("C:\\Users\\Bogdan\\React\\eschenholz\\public\\uploaded");
+        this.props = new StorageProperties();
+        this.rootLocation = Paths.get(props.getLocation());
     }
 
     @Override
