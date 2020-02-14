@@ -33,6 +33,7 @@ class Message extends React.Component {
         this.showWarnings = this.showWarnings.bind(this);
         this.checkCheckbox = this.checkCheckbox.bind(this);
         this.updateCounter = this.updateCounter.bind(this);
+        this.rm = this.rm.bind(this);
         this.counter = React.createRef();
 
       }
@@ -93,7 +94,7 @@ class Message extends React.Component {
         {  
             this.setState({loadingScreen: true});
             this.setState({loading:true});       
-            fetch(messages.HOST+"/api/contact-form?name="+obj.name+"&email="+obj.email+"&phone="+obj.phone,{
+            fetch(messages.HOST+"/api/contact-form",{
                 method: 'PUT',
                 headers: {
                     'Accept':'application/json',
@@ -110,7 +111,7 @@ class Message extends React.Component {
             })
             .catch(err => {
                 console.log(err);
-                this.setState({loadingErrors : err,loadingScreenType: "error",loadingScreenMessage: "wystąpił błąd"});
+                this.setState({loadingErrors : err,loadingScreenType: "error",loadingScreenMessage: err});
             })
             .finally(r=>{
                 //this.setState({loading:false});  
@@ -194,11 +195,19 @@ class Message extends React.Component {
        }
 
     }
+    rm(e){
+        
+        if(e.target.getAttribute("data")=="close-alert")
+        {
+            this.setState({loadingScreen:false});
+        }
+        
+    }
 
     render() {
         const loadingScreen = this.state.loadingScreen ? (<LoadingScreen type={this.state.loadingScreenType} content={this.state.loadingScreenMessage}/>):null;
       return (
-          <div className={Style.main + " " + Style.vertical}>
+          <div className={Style.main + " " + Style.vertical} onClick={this.rm}>
               <div ref={this.warnings} className={Style.vertical + " "+ Style.warnings}>
               </div>
               <div className={Style.horizontal}>

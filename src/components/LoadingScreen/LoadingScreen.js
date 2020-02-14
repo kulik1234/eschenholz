@@ -27,6 +27,7 @@ class LoadingScreen extends React.Component {
         modalRoot.removeChild(this.el);
       }
 
+
     render() {
       let content = <div className={Style.animation}>
       <div></div>
@@ -36,9 +37,12 @@ class LoadingScreen extends React.Component {
       <div></div>
   </div>;
         if(this.props.type === "error")
-    content = <div className={Style.error}>wystapił błąd{this.props.content!=""&&this.props.content!=undefined?": "+this.props.content:""}</div>;
+    content = <div className={Style.error}>
+      <X />
+      wystapił błąd{this.props.content!=""&&this.props.content!=undefined?": "+this.props.content:""}
+      </div>;
         if(this.props.type === "success")
-        content = <div className={Style.success}>Wiadomość została wysłana</div>;
+        content = <div className={Style.success}><X />Wiadomość została wysłana</div>;
         const screen = 
         <div className={Style.main}>
             {content}
@@ -50,3 +54,9 @@ class LoadingScreen extends React.Component {
   }
   
   export default LoadingScreen;
+
+  function X(){
+    return (
+      <div className={Style.x} data="close-alert">X</div>
+    )
+  }
