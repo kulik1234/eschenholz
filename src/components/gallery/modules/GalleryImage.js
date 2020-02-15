@@ -5,7 +5,12 @@ import Style from './css/GalleryImageStyles.module.css';
 class GalleryImage extends React.Component {
 
 
-
+    constructor(props){
+      super(props);
+      this.state={
+        
+      };
+    }
 
     render() {
       return (
@@ -14,7 +19,10 @@ class GalleryImage extends React.Component {
             <div className={Style.imageItem}>
                 
                 <div>
-                    <img src={this.props.src} className={Style.image} width="240px" alt={this.props.alt}></img>
+                    <img src={this.props.src} 
+                    className={Style.image} 
+                    width="240px" 
+                    alt={this.props.alt}></img>
                 </div>
                 <div className={Style.date}>{this.props.date.split("T")[0]}</div>
             </div>

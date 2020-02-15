@@ -3,6 +3,7 @@ import UploadImage from './modules/UploadImage';
 import GalleryImage from './modules/GalleryImage';
 import Style from './css/MainGalleryStyles.module.css'
 import config from '../../messages/messages';
+import FullPhoto from './modules/FullPhoto';
 
 
 class Gallery extends React.Component {
@@ -11,7 +12,9 @@ class Gallery extends React.Component {
     this.state = 
       {
         photos: [],
-        loading: false
+        loading: false,
+        fullPhoto: true,
+        currentPhoto: null
       };
 
     this.addPhoto = this.addPhoto.bind(this);
@@ -25,7 +28,7 @@ class Gallery extends React.Component {
     .then(
       resp => resp.json()
     )
-    .then(resp => this.setState({ photos: resp}))
+    .then(resp => this.setState({ photos: resp,currentPhoto: resp[0]?resp[0]:null}))
     .catch(e => console.log(e))
     .finally(r => {
       console.log("end of loading");
@@ -40,12 +43,20 @@ class Gallery extends React.Component {
     this.setState({photos: tab});
     
   }
+  showFullPhoto(event){
+    console.log(event);
+    this.setState({fullPhoto: true});
+
+  }
+  hideFullPhoto(){
+    this.setState({fullPhoto: false});
+  }
 
     render() {
-
+        let fullPhoto = this.state.fullPhoto?<FullPhoto />:"";
       return (
         <div className={Style.main}>
-          
+          {console.log(this.state)}
           {this.state.loading?"loading...":""}
          <div className={Style.imageContainer}>
          {this.state.photos.map((i,k) => <GalleryImage 
@@ -57,10 +68,11 @@ class Gallery extends React.Component {
          desc={i.description}
          key={k} 
          alt={k}
+         click={this.showFullPhoto}
          />)}
          </div>
          <UploadImage newphoto={this.addPhoto}/>
-         
+         {fullPhoto}
         </div>
       );
     }
