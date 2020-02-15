@@ -34,6 +34,7 @@ class Message extends React.Component {
         this.checkCheckbox = this.checkCheckbox.bind(this);
         this.updateCounter = this.updateCounter.bind(this);
         this.rm = this.rm.bind(this);
+        this.clearContactForm = this.clearContactForm.bind(this);
         this.counter = React.createRef();
 
       }
@@ -108,6 +109,7 @@ class Message extends React.Component {
             .then(resp => {
                 this.setState({data:resp,loadingScreenType: "success"});
                 this.showWarnings(["Wiadomość wysłana"]);
+                this.clearContactForm();
             })
             .catch(err => {
                 console.log(err);
@@ -202,6 +204,17 @@ class Message extends React.Component {
             this.setState({loadingScreen:false});
         }
         
+    }
+
+    clearContactForm(){
+        this.nameInput.current.value="";
+        this.emailInput.current.value="";
+        this.subjectInput.current.value="";
+        this.phoneInput.current.value="";
+        this.emailCheckboxInput.current.checked = false;
+        this.phoneCheckboxInput.current.checked = false;
+        this.messageBody.current.innerHTML="";
+        this.updateCounter();
     }
 
     render() {

@@ -119,6 +119,7 @@ class UploadImage extends React.Component {
             {this.state.files.map((i,k)=>
             <FileElement 
             value={i.name} 
+            modified={i.lastModified}
             sendProgress={this.state.uploadProgress[i.name]?this.state.uploadProgress[i.name].percentage : 0} 
             key={k}
             />)}

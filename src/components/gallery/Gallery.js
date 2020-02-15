@@ -48,7 +48,16 @@ class Gallery extends React.Component {
           
           {this.state.loading?"loading...":""}
          <div className={Style.imageContainer}>
-         {this.state.photos.map((i,k) => <GalleryImage src={i.path} key={k} alt={k}/>)}
+         {this.state.photos.map((i,k) => <GalleryImage 
+         src={i.path} 
+         author={i.author} 
+         category={i.category}
+         date={i.date}
+         name={i.nameOrTitle}
+         desc={i.description}
+         key={k} 
+         alt={k}
+         />)}
          </div>
          <UploadImage newphoto={this.addPhoto}/>
          

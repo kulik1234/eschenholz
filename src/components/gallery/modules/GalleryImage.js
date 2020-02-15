@@ -10,13 +10,18 @@ class GalleryImage extends React.Component {
     render() {
       return (
         <div className={Style.main}>
+            <div className={Style.description}>{this.props.desc}</div>
             <div className={Style.imageItem}>
+                
                 <div>
                     <img src={this.props.src} className={Style.image} width="240px" alt={this.props.alt}></img>
                 </div>
-            
+                <div className={Style.date}>{this.props.date.split("T")[0]}</div>
             </div>
             
+                <div>{this.props.category}</div>
+                <div>{this.props.name}</div>
+                
         </div>
       );
     }
