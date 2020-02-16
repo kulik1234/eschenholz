@@ -19,7 +19,14 @@ class FullPhoto extends React.Component {
       }
 
     render(){
-        let screen = <div className={LoadingScreenStyle.main}>full photo</div>;
+        let screen = 
+        <div className={LoadingScreenStyle.main} onClick={this.props.hide}>
+          <div className={Style.imgContainer} data="image">
+          <div className={Style.move+" "+Style.left} data="image" onClick={this.props.prev}>&#60;</div>
+          <img className={Style.img} src={this.props.photo.path} alt={this.props.alt}></img>
+          <div className={Style.move+" "+Style.right} data="image" onClick={this.props.next}>&#62;</div>
+          </div>
+        </div>;
         return ReactDOM.createPortal(screen,this.el);
     }
 }

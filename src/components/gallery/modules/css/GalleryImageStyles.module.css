@@ -4,29 +4,30 @@
     margin: 25px;
 }
 .imageItem {
-    max-height: 240px;
+    height: 240px;
     width: 240px;
+    position: relative;
     display: flex;
     align-items: center;
+    place-content: center;
+    place-items: center;
+    align-content: center;
     overflow: hidden;
-    position: relative;
     cursor: pointer;
 
 }
-.imageItem > div {
-    flex: 1;
-    
-}
 .image {
+    max-height: 240px;
+    max-width: 240px;
     
 }
 .date {
     position: absolute;
     bottom: 4px;
     right: 2px;
-    color: #fff7;
+    color: #fff;
     z-index: 1;
-    background-color: #0007;
+    background-color: #000;
 }
 .description {
     text-align: center;
