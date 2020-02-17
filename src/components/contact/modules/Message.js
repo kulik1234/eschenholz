@@ -104,7 +104,7 @@ class Message extends React.Component {
                 body: JSON.stringify(obj)
             })
             .then(resp => {
-                console.log(resp.json);
+                    resp.json();
             } )
             .then(resp => {
                 this.setState({data:resp,loadingScreenType: "success"});

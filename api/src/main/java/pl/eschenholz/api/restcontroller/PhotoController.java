@@ -1,16 +1,12 @@
 package pl.eschenholz.api.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.eschenholz.api.entity.Photo;
 import pl.eschenholz.api.enums.PhotoCategory;
 import pl.eschenholz.api.service.FileSystemStorageService;
 import pl.eschenholz.api.service.PhotoService;
-import pl.eschenholz.api.service.StorageService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -60,6 +56,31 @@ public class PhotoController {
     @GetMapping("/photo/{id}")
     public Optional<Photo> getById(@PathVariable("id") Long id){
         return service.findById(id);
+    }
+
+    @GetMapping("/photo/category/{category}")
+    @CrossOrigin
+    public Iterable<Photo> getByCategory(
+            @PathVariable("category") PhotoCategory category,
+            @RequestParam(defaultValue = "1") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "false") Boolean onlySort,
+            @RequestParam(defaultValue = "false") Boolean getAll,
+            @RequestParam(defaultValue = "false") Boolean reverseSorting
+    ){
+        if(onlySort){
+            return service.findByCategory(category,sortBy,reverseSorting);
+        }
+        else if(getAll)
+        {
+            return service.findByCategory(category);
+        }
+        else
+        {
+            return service.findByCategory(category,pageNo,pageSize,sortBy,reverseSorting);
+        }
+
     }
 
     @PutMapping(value = "/photo")

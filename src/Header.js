@@ -5,9 +5,12 @@ import HeaderMenu from './components/menu/header-menu/HeaderMenu';
 class Header extends Component {
   render() {
     return (
-      <div className={HeaderStyles.main}>
+      <div id="header">
+        <div className={HeaderStyles.main}>
         <HeaderMenu CompanyName="Eschenholz"/>
       </div>
+      </div>
+      
     );
   }
 }

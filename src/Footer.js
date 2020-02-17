@@ -5,9 +5,12 @@ import FStyle from './header_and_footer_style/MainFooterStyles.module.css';
 class Footer extends Component {
   render() {
     return (
-      <div className={Style.main+" "+FStyle.main}>
+      <div id="footer">
+        <div className={Style.main+" "+FStyle.main}>
       <h3 className={FStyle.h}>This is the footer</h3>
       </div>
+      </div>
+      
       
     );
   }

@@ -9,6 +9,8 @@ import pl.eschenholz.api.service.ContactFormService;
 import pl.eschenholz.api.service.CustomerService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @RestController
@@ -52,6 +54,13 @@ public class ContactFormController //extends BaseController<ContactForm,ContactF
     @PutMapping("/contact-form")
     @CrossOrigin
     public ContactForm insert(@RequestBody ContactForm c){
+
+        try {
+            System.out.println(new String(c.getCustomerName().getBytes("UTF-8"), "UTF-8"));
+        }
+        catch(UnsupportedEncodingException e){
+            System.out.println(e);
+        }
         return service.save(c);
     }
 

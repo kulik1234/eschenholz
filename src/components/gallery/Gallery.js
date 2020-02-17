@@ -4,7 +4,13 @@ import GalleryImage from './modules/GalleryImage';
 import Style from './css/MainGalleryStyles.module.css'
 import config from '../../messages/messages';
 import FullPhoto from './modules/FullPhoto';
+import SubGallery from './modules/SubGallery';
+import { Switch,Route} from 'react-router-dom';
 
+const galleries = {
+  "kitchenFurniture":{"category":"KITCHEN_FURNITURE","parameter":"/category/"},
+  "stairs":{"category":"STAIRS","parameter":"/category/"}
+}
 
 class Gallery extends React.Component {
   constructor(props) {
@@ -22,26 +28,28 @@ class Gallery extends React.Component {
     this.hideFullPhoto = this.hideFullPhoto.bind(this);
     this.fullPhotoNext = this.fullPhotoNext.bind(this);
     this.fullPhotoPrev = this.fullPhotoPrev.bind(this);
+    this.loadPhotos = this.loadPhotos.bind(this);
 
   }
 
   componentDidMount(){
-    console.log("loading");
+    //this.loadPhotos("?getAll=true");
+  }
+
+  loadPhotos(parameter){
     this.setState({loading:true})
-    fetch(config.HOST+"/api/photo?getAll=true")
+    fetch(config.HOST+"/api/photo"+parameter)
     .then(
       resp => resp.json()
     )
     .then(resp => this.setState({ photos: resp,currentPhoto: resp[0]?resp[0]:null}))
     .catch(e => console.log(e))
     .finally(r => {
-      console.log("end of loading");
       this.setState({loading:false})
   });
   }
 
   addPhoto(photo){
-    console.log(photo);
      let tab = this.state.photos;
     tab.push(photo);
     this.setState({photos: tab});
@@ -95,6 +103,14 @@ class Gallery extends React.Component {
         />:"";
       return (
         <div className={Style.main}>
+          <Switch>
+            <Route path={`${this.props.match.url}/kitchen-furniture`}>
+              <SubGallery g={galleries.kitchenFurniture} loadPhotos={this.loadPhotos}></SubGallery>
+            </Route>
+            <Route path={`${this.props.match.url}/stairs`}>
+            <SubGallery g={galleries.stairs} loadPhotos={this.loadPhotos} />
+            </Route>
+          </Switch>
           {this.state.loading?"loading...":""}
          <div className={Style.imageContainer}>
          {this.state.photos.map(i => <GalleryImage 
