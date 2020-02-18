@@ -1,0 +1,8 @@
+.imageContainer {
+    width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    place-items: center;
+    border-left: 1px solid;
+    border-right: 1px solid;
+}

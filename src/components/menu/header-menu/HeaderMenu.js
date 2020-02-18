@@ -11,11 +11,11 @@ class HeaderMenu extends Component {
     return (
       <div className={MenuStyle.main}>
         <Burger />
-          <MenuItem value="o firmie" to="about" label="about" />
+          <MenuItem value="o firmie" to="/about" label="about" />
           <MenuItem value="oferta" activeOnlyWhenExact={true} to="/offert" label="home"/>
           <MenuItem value="ESCHENHOLZ" companyName="1" to="/" label="home"/>
-          <MenuItem value="kontakt" to="contact" label="contact"/>
-          <MenuItem value="galeria" to="gallery" label="gallary"/>
+          <MenuItem value="kontakt" to="/contact" label="contact"/>
+          <MenuItem value="galeria" to="/gallery" label="gallary"/>
       </div>
     );
   }

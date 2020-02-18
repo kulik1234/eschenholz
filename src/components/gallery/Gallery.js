@@ -1,16 +1,21 @@
 import React from 'react';
-import UploadImage from './modules/UploadImage';
-import GalleryImage from './modules/GalleryImage';
 import Style from './css/MainGalleryStyles.module.css'
 import config from '../../messages/messages';
-import FullPhoto from './modules/FullPhoto';
 import SubGallery from './modules/SubGallery';
 import { Switch,Route} from 'react-router-dom';
+import Navigation from './modules/Navigation';
 
-const galleries = {
-  "kitchenFurniture":{"category":"KITCHEN_FURNITURE","parameter":"/category/"},
-  "stairs":{"category":"STAIRS","parameter":"/category/"}
-}
+const galleries = [
+  ["KITCHEN_FURNITURE","Meble kuchenne"],
+  ["STAIRS","Schody"],
+  ["BEDS","łóżka"],
+  ["DESKS","Biurka"],
+  ["WARDROBES","Szafy"],
+  ["TABLES","Stoły"],
+  ["BATHROOMS","Łazienki"],
+  ["DOOR","Drzwi"],
+  ["NONE","Inne"]
+];
 
 class Gallery extends React.Component {
   constructor(props) {
@@ -32,12 +37,9 @@ class Gallery extends React.Component {
 
   }
 
-  componentDidMount(){
-    //this.loadPhotos("?getAll=true");
-  }
 
   loadPhotos(parameter){
-    this.setState({loading:true})
+      this.setState({loading:true})
     fetch(config.HOST+"/api/photo"+parameter)
     .then(
       resp => resp.json()
@@ -47,6 +49,7 @@ class Gallery extends React.Component {
     .finally(r => {
       this.setState({loading:false})
   });
+       
   }
 
   addPhoto(photo){
@@ -94,39 +97,20 @@ class Gallery extends React.Component {
   }
 
     render() {
-        let fullPhoto = this.state.fullPhoto?
-        <FullPhoto 
-        photo={this.state.currentPhoto}  
-        hide={this.hideFullPhoto} 
-        next={this.fullPhotoNext}
-        prev={this.fullPhotoPrev}
-        />:"";
       return (
+
         <div className={Style.main}>
+          <Navigation param={galleries}/>
           <Switch>
-            <Route path={`${this.props.match.url}/kitchen-furniture`}>
-              <SubGallery g={galleries.kitchenFurniture} loadPhotos={this.loadPhotos}></SubGallery>
+            {galleries.map((i,k)=>
+            <Route path={`${this.props.match.url}/${i[0].toString().toLowerCase().replace("_","-")}`} key={k}>
+              <SubGallery category={i[0]}></SubGallery>
             </Route>
-            <Route path={`${this.props.match.url}/stairs`}>
-            <SubGallery g={galleries.stairs} loadPhotos={this.loadPhotos} />
+            )}            
+            <Route path={`${this.props.match.url}/`}>
+            <Navigation s={true} param={galleries}/>
             </Route>
           </Switch>
-          {this.state.loading?"loading...":""}
-         <div className={Style.imageContainer}>
-         {this.state.photos.map(i => <GalleryImage 
-         src={i.path} 
-         author={i.author} 
-         category={i.category}
-         date={i.date}
-         name={i.nameOrTitle}
-         desc={i.description}
-         key={i.id} 
-         alt={i.id}
-         show={this.showFullPhoto}
-         />)}
-         </div>
-         <UploadImage newphoto={this.addPhoto}/>
-         {fullPhoto}
         </div>
       );
     }

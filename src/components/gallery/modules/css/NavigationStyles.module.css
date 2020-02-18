@@ -1,0 +1,11 @@
+.main a {
+    padding: 10px;
+}
+.s a{
+    color: black;
+    display: block;
+    border: 1px solid;
+    margin: 10px;
+    padding: 20px;
+    text-decoration: none;
+}

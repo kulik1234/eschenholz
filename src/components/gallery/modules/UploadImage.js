@@ -80,7 +80,7 @@ class UploadImage extends React.Component {
        formData.append("path","/uploaded");
        formData.append("descritpion","to jest zdjecie testowe");
        formData.append("author","tester");
-       formData.append("category",1);
+       formData.append("category",this.props.category);
        formData.append("date","1999-12-24T12:00:00");
        req.send(formData);
       });

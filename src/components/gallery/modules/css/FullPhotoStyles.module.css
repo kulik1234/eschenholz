@@ -10,6 +10,7 @@
     place-items: center;
     align-content: center;
     place-content: center;
+    background-color: #0002;
 }
 .img {
     max-width: 100%;

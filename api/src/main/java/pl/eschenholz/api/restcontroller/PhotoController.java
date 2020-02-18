@@ -91,12 +91,12 @@ public class PhotoController {
             @RequestParam("descritpion") String descritpion,
             @RequestParam("path") String path,
             @RequestParam("author") String author,
-            @RequestParam("category") int category,
+            @RequestParam("category") PhotoCategory category,
             @RequestParam("date") String date
     ){
         String fileName = storageService.store(file);
         LocalDateTime time = LocalDateTime.parse(date);
-        Photo photo = new Photo(null,nameOrTitle,path+"/"+fileName,descritpion,author,PhotoCategory.values()[category],time);
+        Photo photo = new Photo(null,nameOrTitle,path+"/"+fileName,descritpion,author,category,time);
        return service.save(photo);
     }
 
