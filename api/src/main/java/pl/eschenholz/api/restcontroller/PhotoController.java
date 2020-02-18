@@ -54,6 +54,7 @@ public class PhotoController {
 
 
     @GetMapping("/photo/{id}")
+    @CrossOrigin
     public Optional<Photo> getById(@PathVariable("id") Long id){
         return service.findById(id);
     }

@@ -5,14 +5,12 @@ import { Router } from 'react-router-dom';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<Router><MenuItem value="kontakt" to="contact" label="contact"/></Router>, div);
+  ReactDOM.render(<MenuItem value="kontakt" to="contact" label="contact"/>, div);
 });
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
-  <Router>
     <MenuItem value="kontakt" to="contact" label="contact"/>
-    </Router>
   ,div
   );
 

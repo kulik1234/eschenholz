@@ -15,7 +15,7 @@ class SubGallery extends React.Component {
         loading: false,
         fullPhoto: false,
         currentPhoto: null,
-        canUpload: false
+        canUpload: true
           };
 
     this.addPhoto = this.addPhoto.bind(this);
@@ -31,17 +31,22 @@ class SubGallery extends React.Component {
         this.loadPhotos("/category/"+this.props.category);
     }
     loadPhotos(parameter){
-        this.setState({loading:true})
-      fetch(config.HOST+"/api/photo"+parameter)
-      .then(
-        resp => resp.json()
-      )
-      .then(resp => this.setState({ photos: resp,currentPhoto: resp[0]?resp[0]:null}))
-      .catch(e => console.log(e))
-      .finally(r => {
-        this.setState({loading:false})
-    });
-         
+      let f = `
+      onmessage = (inputData)=>{
+          fetch(inputData.data)
+            .then( resp => resp.json())
+            .then(resp => postMessage(resp))
+            .catch(e => console.log(e));
+      }
+      `;
+      let _blob = new Blob([f], { type: 'text/javascript' });
+      let worker = new Worker(window.URL.createObjectURL(_blob));
+      worker.onmessage = (data)=>{
+        this.setState({ photos: data.data,currentPhoto: data.data[0]?data.data[0]:null})
+        this.setState({loading:false});
+      }
+      this.setState({loading:true});
+      worker.postMessage(config.HOST+"/api/photo"+parameter+"?getAll=true");
     }
   
     addPhoto(photo){
