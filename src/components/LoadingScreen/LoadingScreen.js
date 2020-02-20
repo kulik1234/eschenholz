@@ -43,6 +43,8 @@ class LoadingScreen extends React.Component {
       </div>;
         if(this.props.type === "success")
         content = <div className={Style.success}><X />Wiadomość została wysłana</div>;
+        if(this.props.type === "component")
+        content = <div><X />{this.props.children}</div>
         const screen = 
         <div className={Style.main}>
             {content}

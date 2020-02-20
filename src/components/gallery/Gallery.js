@@ -104,7 +104,7 @@ class Gallery extends React.Component {
           <Switch>
             {galleries.map((i,k)=>
             <Route path={`${this.props.match.url}/${i[0].toString().toLowerCase().replace("_","-")}`} key={k}>
-              <SubGallery category={i[0]}></SubGallery>
+              <SubGallery category={i[0]} name={i[1]}></SubGallery>
             </Route>
             )}            
             <Route path={`${this.props.match.url}/`}>

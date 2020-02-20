@@ -17,7 +17,7 @@ class UploadImage extends React.Component {
 
     this.onFilesAdded = this.onFilesAdded.bind(this);
     this.uploadFiles = this.uploadFiles.bind(this);
-  
+    this.sendRequest = this.sendRequest.bind(this);
     this.clearFileList = this.clearFileList.bind(this);
     this.removeFile = this.removeFile.bind(this);
     this.addPhotoUp = this.props.newphoto.bind(this);
@@ -28,98 +28,76 @@ class UploadImage extends React.Component {
       }));
     }
 
-    uploadFiles(){
-        let f = ` var state;
-        var props;
-        onmessage = async (message)=>{
-            state = message.data[0];
-            props = message.data[1];
-            url =  message.data[2];
-           const promises = [];
-           state.files.forEach(file => {
-             let p = sendRequest(file,url);
-             p.then(p=>p.onloadend=(e)=>{postMessage([JSON.parse(e.explicitOriginalTarget.responseText)])});
-             promises.push(p);
-           });
-           try {
-              await Promise.all(promises);
-              state.successfullUploaded = true;
-              state.uploading = false;
-              postMessage([state,props]);
-           } catch (e) {
-             // Not Production ready! Do some error handling here instead...
-             state.successfullUploaded = true;
-              state.uploading = false;
-              postMessage([state,props]);
-           }
-         }
-       function sendRequest(file,url) {
-           return new Promise((resolve, reject) => {
-            const req = new XMLHttpRequest();
-            req.open("PUT",url);
-            req.upload.addEventListener("progress", event => {
-             if (event.lengthComputable) {
-              const copy = { ...state.uploadProgress };
-              copy[file.name] = {
-               state: "pending",
-               percentage: (event.loaded / event.total) * 100
-              };
-              state.uploadProgress = copy;
-             }
-            });
-             
-            req.upload.addEventListener("load", event => {
-             const copy = { ...state.uploadProgress };
-             copy[file.name] = { state: "done", percentage: 100 };
-             state.uploadProgress = copy;
-             resolve(req);
-            });
-             
-            req.upload.addEventListener("error", event => {
-             const copy = { ...state.uploadProgress };
-             copy[file.name] = { state: "error", percentage: 0 };
-             state.uploadProgress = copy;
-             reject(req);
-            });
-            
-            const formData = new FormData();
-            formData.append("file", file, file.name);
-            formData.append("nameOrTitle","test");
-            formData.append("path","/uploaded");
-            formData.append("descritpion","to jest zdjecie testowe");
-            formData.append("author","tester");
-            formData.append("category",props.category);
-            formData.append("date","1999-12-24T12:00:00");
-            req.send(formData);
-           });
-           
-       }`;
-       let _blob = new Blob([f], { type: 'text/javascript' });
-      let worker = new Worker(window.URL.createObjectURL(_blob));
-      let st = {
-        files: [],
-        uploading: false,
-        uploadProgress: {},
-        successfullUploaded: false,
-        responsePhoto: {}
-      };
-
-      st.files = this.state.files;
-      st.uploading = this.state.uploadProgress;
-      st.responsePhoto = this.state.responsePhoto;
-      st.successfullUploaded = this.state.successfullUploaded;
-      st.uploadProgress = this.state.uploadProgress;
-      let pr = {"category" : this.props.category};
-      worker.postMessage([
-        st,
-        pr,
-        config.HOST+"/api/photo"
-      ]);
-      worker.onmessage = (a)=>{
-        console.log(a.data);
+    async asyncForEach(array, callback) {
+      for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array);
       }
     }
 
+    async uploadFiles(){
+      this.setState({ uploadProgress: {}, uploading: true });
+      const promises = [];
+      this.state.files.forEach(file => {
+        let p = this.sendRequest(file);
+        p.then(p=>p.onloadend=(e)=>{this.addPhotoUp(JSON.parse(e.explicitOriginalTarget.responseText))});
+        promises.push(p);
+      });
+      try {
+        for await(const promise of promises){
+          Promise.resolve(promise);
+          console.log(promise);
+        }
+        
+        this.setState({ successfullUploaded: true, uploading: false });
+      } catch (e) {
+        // Not Production ready! Do some error handling here instead...
+        this.setState({ successfullUploaded: true, uploading: false });
+      }
+    }
+
+    
+
+    sendRequest(file) {
+      return new Promise((resolve, reject) => {
+       const req = new XMLHttpRequest();
+       req.open("PUT", config.HOST+"/api/photo");
+       req.upload.addEventListener("progress", event => {
+        if (event.lengthComputable) {
+         const copy = { ...this.state.uploadProgress };
+         copy[file.name] = {
+          state: "pending",
+          percentage: (event.loaded / event.total) * 100
+         };
+         this.setState({ uploadProgress: copy });
+        }
+       });
+        
+       req.upload.addEventListener("load", event => {
+        const copy = { ...this.state.uploadProgress };
+        copy[file.name] = { state: "done", percentage: 100 };
+        this.setState({ uploadProgress: copy });
+        resolve(req);
+       });
+        
+       req.upload.addEventListener("error", event => {
+        const copy = { ...this.state.uploadProgress };
+        copy[file.name] = { state: "error", percentage: 0 };
+        this.setState({ uploadProgress: copy });
+        reject(req);
+       });
+       
+       const formData = new FormData();
+       formData.append("file", file, file.name);
+       formData.append("nameOrTitle","test");
+       formData.append("path","/uploaded");
+       formData.append("descritpion","to jest zdjecie testowe");
+       formData.append("author","tester");
+       formData.append("category",this.props.category);
+       formData.append("date","1999-12-24T12:00:00");
+       req.send(formData);
+      });
+      
+     }
     clearFileList(){
       this.setState({files: [],successfullUploaded: false});
     }

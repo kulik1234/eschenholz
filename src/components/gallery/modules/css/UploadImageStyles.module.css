@@ -16,6 +16,7 @@
     overflow: auto;
     border: 1px solid #0003;
     padding: 3px;
+    background-color: white;
 }
 .center {
     align-items: center;

@@ -4,6 +4,7 @@ import GalleryImage from './GalleryImage';
 import UploadImage from './UploadImage';
 import FullPhoto from './FullPhoto';
 import Style from './css/SubGalleryStyles.module.css';
+import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 
 class SubGallery extends React.Component {
 
@@ -15,7 +16,8 @@ class SubGallery extends React.Component {
         loading: false,
         fullPhoto: false,
         currentPhoto: null,
-        canUpload: true
+        canUpload: false,
+        showUpload: false
           };
 
     this.addPhoto = this.addPhoto.bind(this);
@@ -24,6 +26,8 @@ class SubGallery extends React.Component {
     this.fullPhotoNext = this.fullPhotoNext.bind(this);
     this.fullPhotoPrev = this.fullPhotoPrev.bind(this);
     this.loadPhotos = this.loadPhotos.bind(this);
+    this.hideUpload = this.hideUpload.bind(this);
+
     }
 
 
@@ -31,22 +35,17 @@ class SubGallery extends React.Component {
         this.loadPhotos("/category/"+this.props.category);
     }
     loadPhotos(parameter){
-      let f = `
-      onmessage = (inputData)=>{
-          fetch(inputData.data)
-            .then( resp => resp.json())
-            .then(resp => postMessage(resp))
-            .catch(e => console.log(e));
-      }
-      `;
-      let _blob = new Blob([f], { type: 'text/javascript' });
-      let worker = new Worker(window.URL.createObjectURL(_blob));
-      worker.onmessage = (data)=>{
-        this.setState({ photos: data.data,currentPhoto: data.data[0]?data.data[0]:null})
-        this.setState({loading:false});
-      }
-      this.setState({loading:true});
-      worker.postMessage(config.HOST+"/api/photo"+parameter+"?getAll=true");
+        this.setState({loading:true})
+      fetch(config.HOST+"/api/photo"+parameter)
+      .then(
+        resp => resp.json()
+      )
+      .then(resp => this.setState({ photos: resp,currentPhoto: resp[0]?resp[0]:null}))
+      .catch(e => console.log(e))
+      .finally(r => {
+        this.setState({loading:false})
+    });
+         
     }
   
     addPhoto(photo){
@@ -100,6 +99,14 @@ class SubGallery extends React.Component {
         }
 
     }
+    hideUpload(e){
+        
+      if(e.target.getAttribute("data")=="close-alert")
+      {
+          this.setState({showUpload:false});
+      }
+      
+  }
     render() {
         let fullPhoto = this.state.fullPhoto?
         <FullPhoto 
@@ -108,11 +115,14 @@ class SubGallery extends React.Component {
         next={this.fullPhotoNext}
         prev={this.fullPhotoPrev}
         />:"";
+        let upload = <div onClick={()=>{this.setState({showUpload: true})}} style={{"cursor":"pointer","textAlign":"center","padding":"20px","border":"1px solid"}}>
+          Przeslij zdjecia
+        </div>;
         
         return (
-            <div>
+            <div onClick={this.hideUpload}>
                 <div >
-                    {this.props.category}
+                    {this.props.name}
                 </div>
                 {this.state.loading ? "loading..." : ""}
                 <div className={Style.imageContainer}>
@@ -129,7 +139,10 @@ class SubGallery extends React.Component {
                     />)
                     }
                 </div>
-                {this.state.canUpload?<UploadImage newphoto={this.addPhoto} category={this.props.category}/>:""}
+                {this.state.canUpload?upload:""}
+                {this.state.showUpload?<LoadingScreen type="component" close={this.hideUpload}>
+            <UploadImage newphoto={this.addPhoto} category={this.props.category}/>
+          </LoadingScreen>:""}
                 {fullPhoto}
             </div>
         )
