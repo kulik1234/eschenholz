@@ -3,8 +3,8 @@ package pl.eschenholz.api.filters;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,10 +17,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Null;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class JwtFilter extends BasicAuthenticationFilter {
     public JwtFilter(AuthenticationManager authenticationManager) {
@@ -45,18 +44,19 @@ public class JwtFilter extends BasicAuthenticationFilter {
         try {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
             token = verifier.verify(header.substring(7));
-            role = token.getHeaderClaim("role");
-            login = token.getHeaderClaim("login");
-            Map<String, Claim> claims = token.getClaims();
-            Set<SimpleGrantedAuthority> simpleGrantedAuthorities = Collections.singleton(new SimpleGrantedAuthority(claims.get("role").asString()));
-            return new UsernamePasswordAuthenticationToken(claims.get("login"),null,simpleGrantedAuthorities);
+                role = token.getHeaderClaim("role");
+                login = token.getHeaderClaim("login");
+                Map<String, Claim> claims = token.getClaims();
+                Set<SimpleGrantedAuthority> simpleGrantedAuthorities = Collections.singleton(new SimpleGrantedAuthority(claims.get("role").asString()));
+                return new UsernamePasswordAuthenticationToken(claims.get("login"),null,simpleGrantedAuthorities);
+
         }
-        catch (JWTVerificationException e){
+        catch (JWTVerificationException | NullPointerException e){
             System.out.println(e);
         }
 
 
 
-        return null;
+        return null;// new UsernamePasswordAuthenticationToken("Anonymus",null, Collections.singleton(new SimpleGrantedAuthority("ROLE_ANONYMUS")));
     }
 }

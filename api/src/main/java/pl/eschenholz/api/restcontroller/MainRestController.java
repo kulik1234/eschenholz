@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.eschenholz.api.entity.Photo;
@@ -25,6 +26,7 @@ public class MainRestController {
     UserService service;
 
     @PostMapping("/api/login")
+    @CrossOrigin
     public String login(@RequestParam String login,@RequestParam String password) throws UserNotFoundException, UserWrongPasswordException {
         Optional<User> usr = service.findByLogin(login);
         if(usr.isPresent()){
@@ -51,13 +53,19 @@ public class MainRestController {
             else {
                 throw new UserWrongPasswordException("Podano złe hasło");
             }
-
         }
         else
         {
             throw new UserNotFoundException("Użytkownik z takim loginem nie został znaleziony");
         }
 
+
+    }
+    @GetMapping("/api/login")
+    @CrossOrigin
+    public User getDetails(){
+        System.out.println(SecurityContextHolder.getContext());
+        return new User();
 
     }
     @PutMapping("/api/user")

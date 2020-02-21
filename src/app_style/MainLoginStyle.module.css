@@ -1,0 +1,8 @@
+.main {
+    text-align: center;
+}
+.main > form > div {
+}
+.main > form > div > input {
+    margin: 10px;
+}
