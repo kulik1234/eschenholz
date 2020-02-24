@@ -12,11 +12,22 @@ import Login from './Login';
 
 class App extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.exitConfirm = this.exitConfirm.bind(this);
+  }
+  exitConfirm(e){
+    if(this.props.user!==undefined)
+    if(!window.confirm("Jesteś pewny że chcesz opuścić stronę?"))
+      e.preventDefault();
+  }
+
   componentDidMount() {
-    window.addEventListener('beforeunload',(e)=>{
-      if(!window.prompt("Jesteś pewny że chcesz opuścić stronę?"))
-        e.preventDefault();
-    })
+    window.addEventListener('beforeunload',this.exitConfirm);
+  }
+  componentWillUnmount(){
+    window.removeEventListener("beforeunload",this.exitConfirm);
+
   }
   render() {
     return (
@@ -27,7 +38,9 @@ class App extends React.Component {
             <Route path="/contact" component={Contact} />
             <Route path="/gallery" component={Gallery} />
             <Route path="/about" component={About} />
-            <Route path="/login" component={Login} />            
+            <Route path="/login" >
+              <Login setUser={this.props.setUser} />
+              </Route>            
           </Switch>
       </div>
       

@@ -7,9 +7,9 @@ class Home extends React.Component {
     return (
       <div className={Style.main}>
         <UserContext.Consumer>
-        {(user)=>{
-          if(user.token!==""&&user.username!=="") return <h1 style={{"marginTop":"0px"}}>
-            Zalogowany użytkownik: {user.username}
+        {(o)=>{
+          if(o.user!==null) return <h1 style={{"marginTop":"0px"}}>
+            Zalogowany użytkownik: {o.user.login}
             
             </h1>;
         }}

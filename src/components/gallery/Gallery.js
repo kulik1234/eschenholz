@@ -4,7 +4,7 @@ import config from '../../messages/messages';
 import SubGallery from './modules/SubGallery';
 import { Switch,Route} from 'react-router-dom';
 import Navigation from './modules/Navigation';
-import { UserContext } from '../../index';
+
 
 const galleries = [
   ["KITCHEN_FURNITURE","Meble kuchenne"],

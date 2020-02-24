@@ -36,16 +36,11 @@ public class JwtFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthenticationByToken(String header) {
 
-        Claim claim;
-        DecodedJWT token;
-        Claim role;
-        Claim login;
-        Algorithm algorithm = Algorithm.HMAC512("algo");
         try {
+            DecodedJWT token;
+            Algorithm algorithm = Algorithm.HMAC512("algo");
             JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
             token = verifier.verify(header.substring(7));
-                role = token.getHeaderClaim("role");
-                login = token.getHeaderClaim("login");
                 Map<String, Claim> claims = token.getClaims();
                 Set<SimpleGrantedAuthority> simpleGrantedAuthorities = Collections.singleton(new SimpleGrantedAuthority(claims.get("role").asString()));
                 return new UsernamePasswordAuthenticationToken(claims.get("login"),null,simpleGrantedAuthorities);

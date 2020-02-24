@@ -3,6 +3,7 @@ import Style from './app_style/MainLoginStyle.module.css';
 import config from './messages/messages';
 import { UserContext } from '.';
 import {Redirect} from 'react-router-dom';
+import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 
 
 class Login extends React.Component {
@@ -13,22 +14,23 @@ class Login extends React.Component {
         super(props);
 
         this.state = {
-            "token":"",
-            "username":"",
+            "user":null,
             "errorMessage":"",
-            "redirect":false
+            "redirect":false,
+            "loggingIn":false
 
         }
 
 
         this.loginRef = React.createRef();
         this.passwordRef = React.createRef();
-        
+        this.setUserToFooter = this.props.setUser.bind(this);
         this.sendLogin = this.sendLogin.bind(this);
     }
 
     sendLogin(e){
         e.preventDefault();
+        this.setState({"loggingIn":true});
         let login = this.loginRef.current.value;
         let password = this.passwordRef.current.value;
         let formData = new FormData();
@@ -48,15 +50,19 @@ class Login extends React.Component {
             catch(e){
                 ok = r;
             }
-            if(typeof ok === "string"){
-                this.setState({"token":ok,"username":login,"errorMessage":"","redirect":true});
+            if(ok.login!==undefined){
+                console.log(ok);
+                this.setState({"user":ok,"errorMessage":"","redirect":true});
 
 
             }
             else {
                 this.setState({"errorMessage":ok.message});
             }
-        });
+        })
+        .finally(r=>{
+            this.setState({"loggingIn":false});
+        })
 
     }
 
@@ -64,9 +70,9 @@ class Login extends React.Component {
     render() {
         return <div className={Style.main}>
             <UserContext.Consumer>
-                {(user)=>{
-                        user.token=this.state.token;
-                        user.username=this.state.username;
+                {(usr)=>{
+                        usr.user = this.state.user;
+                        this.setUserToFooter(this.state.user);
                 }}
             </UserContext.Consumer>
             {
@@ -86,6 +92,7 @@ class Login extends React.Component {
                 
             </div>
             </form>
+            {this.state.loggingIn?<LoadingScreen />:""}
         </div>;
     }
 }

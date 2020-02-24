@@ -25,9 +25,10 @@ public class MainRestController {
     @Autowired
     UserService service;
 
+
     @PostMapping("/api/login")
     @CrossOrigin
-    public String login(@RequestParam String login,@RequestParam String password) throws UserNotFoundException, UserWrongPasswordException {
+    public User login(@RequestParam String login,@RequestParam String password) throws UserNotFoundException, UserWrongPasswordException {
         Optional<User> usr = service.findByLogin(login);
         if(usr.isPresent()){
             BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
@@ -42,13 +43,14 @@ public class MainRestController {
                             .withIssuedAt((new Date(System.currentTimeMillis())))
                             .withExpiresAt((new Date(System.currentTimeMillis()+15*60*1000)))
                             .sign(algorithm);
-                    return token;
+                            usr.get().setLoginToken(token);
+                    return usr.get();
 
 
                 } catch (JWTCreationException exception){
                     System.out.println("Nie udało się utworzyć tokenu: "+exception);
                 }
-                return "";
+                return new User();
             }
             else {
                 throw new UserWrongPasswordException("Podano złe hasło");
@@ -59,13 +61,6 @@ public class MainRestController {
             throw new UserNotFoundException("Użytkownik z takim loginem nie został znaleziony");
         }
 
-
-    }
-    @GetMapping("/api/login")
-    @CrossOrigin
-    public User getDetails(){
-        System.out.println(SecurityContextHolder.getContext());
-        return new User();
 
     }
     @PutMapping("/api/user")

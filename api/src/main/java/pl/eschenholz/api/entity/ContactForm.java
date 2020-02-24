@@ -1,5 +1,6 @@
 package pl.eschenholz.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.eschenholz.api.enums.ContactFormStatus;
 
 import javax.persistence.*;
@@ -26,12 +27,15 @@ public class ContactForm extends Base{
     private ContactFormStatus status;
 
     @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String customerName;
 
     @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String customerEmail;
 
     @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String customerPhone;
 
 

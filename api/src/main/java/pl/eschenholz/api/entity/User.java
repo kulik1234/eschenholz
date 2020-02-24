@@ -1,11 +1,9 @@
 package pl.eschenholz.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.eschenholz.api.enums.UserRole;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,17 +13,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String login;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private UserRole userRole;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean active;
     private LocalDateTime creationDate;
     private LocalDateTime activationDate;
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String loginToken;
 
 
     public User() {
     }
 
-    public User(Long id, String login, String password, UserRole userRoles, boolean active, LocalDateTime creationDate, LocalDateTime activationDate) {
+    public User(Long id, String login, String password, UserRole userRoles, boolean active, LocalDateTime creationDate, LocalDateTime activationDate,String loginToken) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -33,6 +36,7 @@ public class User {
         this.active = active;
         this.creationDate = creationDate;
         this.activationDate = activationDate;
+        this.loginToken = loginToken;
     }
 
     public String getLogin() {
@@ -89,5 +93,13 @@ public class User {
 
     public void setActivationDate(LocalDateTime activationDate) {
         this.activationDate = activationDate;
+    }
+
+    public String getLoginToken() {
+        return loginToken;
+    }
+
+    public void setLoginToken(String loginToken) {
+        this.loginToken = loginToken;
     }
 }

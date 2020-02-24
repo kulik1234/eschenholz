@@ -11,9 +11,9 @@ class Offert extends React.Component {
               OFERTA
               <div>
                 <UserContext.Consumer>
-                  {(user)=>{
-                    if(user.token!=="")
-                    return user.token+":::::"+user.username;
+                  {(o)=>{
+                    if(o.user!==null)
+                    return "::::::::"+o.user.login+":::::";
                   }}
                 </UserContext.Consumer>
               </div>

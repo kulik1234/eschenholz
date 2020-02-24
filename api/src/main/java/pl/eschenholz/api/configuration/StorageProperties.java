@@ -9,7 +9,7 @@ public class StorageProperties {
     /**
      * Folder location for storing files
      */
-    private String location = ApiApplication.class.getProtectionDomain().getCodeSource().getLocation().getPath().toString().split("[A-Z]{1}:")[1]+"../../../public/uploaded";
+    private String location = ApiApplication.class.getProtectionDomain().getCodeSource().getLocation().getPath().toString().split("[A-Z]{1}:").length>1?ApiApplication.class.getProtectionDomain().getCodeSource().getLocation().getPath().toString().split("[A-Z]{1}:")[1]+"../../../public/uploaded":ApiApplication.class.getProtectionDomain().getCodeSource().getLocation().getPath().toString().split("[A-Z]{1}:")[0]+"../../../public/uploaded";
 
     public String getLocation() {
         return location;

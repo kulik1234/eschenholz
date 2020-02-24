@@ -13,14 +13,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().and().authorizeRequests()
-                .antMatchers("/test2").hasRole("USER")
-                .antMatchers("/test3").hasRole("ADMIN")
-                .antMatchers("/api/customer/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/api/login*").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/login*").permitAll()
-                .anyRequest().authenticated()
+                .mvcMatchers("/test2").hasAnyRole("USER","ADMIN")
+                .mvcMatchers("/test3").hasRole("ADMIN")
+                .mvcMatchers("/api/customer/**").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.POST,"/api/login*").permitAll()
+                .mvcMatchers(HttpMethod.GET,"/api/login*").permitAll()
                 .and().formLogin()
                 .and()
+                .csrf().disable()
                 .addFilter(new JwtFilter(authenticationManager()));
     }
 }
