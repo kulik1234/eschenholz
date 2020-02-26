@@ -45,13 +45,13 @@ class UploadImage extends React.Component {
       try {
         for await(const promise of promises){
           Promise.resolve(promise);
-          console.log(promise);
         }
         
         this.setState({ successfullUploaded: true, uploading: false });
       } catch (e) {
         // Not Production ready! Do some error handling here instead...
         this.setState({ successfullUploaded: true, uploading: false });
+        console.log(e);
       }
     }
 

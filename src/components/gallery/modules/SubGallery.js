@@ -16,7 +16,7 @@ class SubGallery extends React.Component {
         loading: false,
         fullPhoto: false,
         currentPhoto: null,
-        canUpload: false,
+        canUpload: true,
         showUpload: false
           };
 

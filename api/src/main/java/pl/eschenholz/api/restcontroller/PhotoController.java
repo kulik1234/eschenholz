@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.eschenholz.api.entity.Photo;
+import pl.eschenholz.api.enums.Enpoints;
 import pl.eschenholz.api.enums.PhotoCategory;
 import pl.eschenholz.api.service.FileSystemStorageService;
 import pl.eschenholz.api.service.PhotoService;
@@ -13,7 +14,6 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api")
 public class PhotoController {
 
 
@@ -29,7 +29,7 @@ public class PhotoController {
     }
 
 
-    @GetMapping("/photo")
+    @GetMapping(Enpoints.PHOTO_ENDPOINT)
     @CrossOrigin
     public Iterable<Photo> getAll(
             @RequestParam(defaultValue = "1") Integer pageNo,
@@ -53,13 +53,13 @@ public class PhotoController {
     }
 
 
-    @GetMapping("/photo/{id}")
+    @GetMapping(Enpoints.PHOTO_ENDPOINT_WITH_PATHVARIABLE)
     @CrossOrigin
     public Optional<Photo> getById(@PathVariable("id") Long id){
         return service.findById(id);
     }
 
-    @GetMapping("/photo/category/{category}")
+    @GetMapping(Enpoints.PHOTO_ENDPOINT_WITH_CATEGORY_AND_PATHVARIABLE)
     @CrossOrigin
     public Iterable<Photo> getByCategory(
             @PathVariable("category") PhotoCategory category,
@@ -84,7 +84,7 @@ public class PhotoController {
 
     }
 
-    @PutMapping(value = "/photo")
+    @PutMapping(Enpoints.PHOTO_ENDPOINT)
     @CrossOrigin
     public Photo insertPhoto(
             @RequestParam("file") MultipartFile file,
@@ -101,12 +101,12 @@ public class PhotoController {
        return service.save(photo);
     }
 
-    @PostMapping("/photo")
+    @PostMapping(Enpoints.PHOTO_ENDPOINT)
     public Photo updatePhoto(@RequestBody Photo p){
         return service.findById(p.getId()).orElse(service.save(p));
     }
 
-    @DeleteMapping("/photo")
+    @DeleteMapping(Enpoints.PHOTO_ENDPOINT)
     public void removePhoto(@RequestBody Photo p){
         service.delete(p);
     }
