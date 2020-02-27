@@ -42,7 +42,7 @@ class LoadingScreen extends React.Component {
       wystapił błąd{this.props.content!==""&&this.props.content!==undefined?": "+this.props.content:""}
       </div>;
         if(this.props.type === "success")
-        content = <div className={Style.success}><X />Wiadomość została wysłana</div>;
+        content = <div className={Style.success}><X />{this.props.content!==""&&this.props.content!==undefined?this.props.content:""}</div>;
         if(this.props.type === "component")
         content = <div><X />{this.props.children}</div>
         const screen = 

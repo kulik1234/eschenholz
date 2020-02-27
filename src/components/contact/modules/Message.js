@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Style from './css/MessageStyles.module.css';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 import messages from '../../../messages/messages';
-import { Form, Field } from 'react-final-form'
+import { Form, Field,useField} from 'react-final-form'
 
-const validSubject = value => (messages.POLISH_CHARS_REGEXP_50.test(value) ? undefined : 'Temat jest niepoprawny');
+const validSubject = value => (messages.POLISH_CHARS_REGEXP_50.test(value) ? undefined : 'Pole jest wypełnione błednie');
 const validContent = value => (messages.POLISH_CHARS_REGEXP_250.test(value) ? undefined : "Treść wiadomości jest niepoprawna");
+const validEmail = value => (messages.EMAIL_REGEXP.test(value) ? undefined : "Email jest niepoprawny");
+const validPhone = value => (/^[0-9]{9}$/.test(value) ? undefined : "Numer telefonu jest niepoprawny");
 const required = value => (value ? undefined : "Pole wymagane");
 const composeValidators = (...validators) => value =>
     validators.reduce((error, validator) => error || validator(value), undefined);
@@ -24,48 +26,15 @@ class Message extends React.Component {
 
         };
         this.loading = React.createRef();
-        this.warnings = React.createRef();
+        this.resetFormButton = React.createRef();
         this.sendMessage = this.sendMessage.bind(this);
-        this.showWarnings = this.showWarnings.bind(this);
-        this.checkCheckbox = this.checkCheckbox.bind(this);
         this.rm = this.rm.bind(this);
 
     }
 
-    checkCheckbox(e) {
-        let input;
-        if (e.target.getAttribute("data") === "email") { input = this.emailCheckboxInput.current; }
-        else { input = this.phoneCheckboxInput.current; }
-        if (!e.target.value == "") {
-            input.checked = true;
-        }
-        else {
-            input.checked = false;
-        }
-    }
 
 
-
-
-    sendMessage() {
-
-        var obj = {
-            'customerName': this.nameInput.current.value.trim(),
-            'customerEmail': this.emailInput.current.value.trim(),
-            'customerPhone': this.phoneInput.current.value.trim().split(" ").join(""),
-            'subject': this.subjectInput.current.value.trim(),
-            'ifEmail': this.emailCheckboxInput.current.checked ? 1 : 0,
-            'ifPhone': this.phoneCheckboxInput.current.checked ? 1 : 0,
-            'content': this.readContent().trim(),
-
-        };
-        this.setState(
-            { "message": obj }
-        );
-
-        if (
-            this.checkInputs(obj)
-        ) {
+    sendMessage(obj) {
             this.setState({ loadingScreen: true });
             this.setState({ loading: true });
             fetch(messages.HOST + "/api/contact-form", {
@@ -80,9 +49,8 @@ class Message extends React.Component {
                     resp.json();
                 })
                 .then(resp => {
-                    this.setState({ data: resp, loadingScreenType: "success" });
-                    this.showWarnings(["Wiadomość wysłana"]);
-                    this.clearContactForm();
+                    this.setState({ data: resp, loadingScreenType: "success" ,loadingScreenMessage: "Wiadomość została wysłana"});
+                    this.resetFormButton.current.click();
                 })
                 .catch(err => {
                     console.log(err);
@@ -91,73 +59,11 @@ class Message extends React.Component {
                 .finally(r => {
                     //this.setState({loading:false});  
 
-                })
-        }
-        else {
-            console.log("wpisano niepoprawne dane");
-            console.log(JSON.stringify(obj));
-        }
+                });
 
 
     }
 
-    showWarnings(warnings) {
-        this.warnings.current.innerHTML = "";
-        for (let b of warnings) {
-            var div = document.createElement("div");
-            div.appendChild(document.createTextNode(b));
-            this.warnings.current.appendChild(div);
-        }
-
-    }
-
-    checkInputs(obj) {
-        var warnings = [];
-        var errorCount = 0;
-
-        if (!messages.POLISH_CHARS_REGEXP_50.test(obj.customerName)) {
-            warnings.push(messages.WRONG_NAME_AND_SURNAME);
-            errorCount++;
-        }
-        if (!/^.{5,250}$/.test(this.messageBody.current.textContent)) {
-            warnings.push(messages.WRONG_CONTENT);
-            errorCount++;
-        }
-        if (!messages.POLISH_CHARS_REGEXP_50.test(obj.subject)) {
-            warnings.push(messages.WRONG_SUBJECT);
-            errorCount++;
-        }
-        let true1 = false;
-        let true2 = false;
-        if (obj.ifEmail) {
-            if (messages.EMAIL_REGEXP.test(obj.customerEmail))
-                true1 = true;
-        }
-        else {
-            true1 = true;
-        }
-        if (obj.ifPhone) {
-            if (/^[0-9]{9}$/.test(obj.customerPhone))
-                true2 = true;
-
-        }
-        else {
-            true2 = true;
-        }
-        if (
-            !(true1 && true2 && (obj.ifEmail || obj.ifPhone))
-        ) {
-            warnings.push(messages.WRONG_CONTACT);
-            errorCount++;
-        }
-
-        this.showWarnings(warnings);
-
-
-        if (errorCount)
-            return false;
-        else return true;
-    }
     rm(e) {
 
         if (e.target.getAttribute("data") == "close-alert") {
@@ -182,33 +88,68 @@ class Message extends React.Component {
                             e.ifEmail = e.contact.includes("email") === true ? 1 : 0;
                             e.ifPhone = e.contact.includes("phone") === true ? 1 : 0;
                         }
+                        this.sendMessage(e);
                         console.log(e);
 
 
                     }}
-                    render={({ handleSubmit, form, submitting, pristine, values }) => (
+
+
+                    validate={(values)=>{
+                        
+                        const errors = {};
+                        let valEm = validEmail(values.customerEmail);
+                        values.customerPhone = values.customerPhone?values.customerPhone:"";
+                        let valPh = validPhone(values.customerPhone.toString().trim().split(" ").join("").split("-").join(""));
+                        let a = (!valEm)&&(values.contact!==undefined&&values.contact.includes("email"));
+                        let b = ((!valPh)&&(values.contact!==undefined&&values.contact.includes("phone")));
+                        if(!(a||b)){
+                            let err = "Nie zaznaczyłeś formy kontaktu";
+                            errors.customerEmail = valEm?valEm:err;
+                            errors.customerPhone = valPh?valPh:err;
+                        }
+
+
+                        return errors;
+                    }}
+
+                    render={({ handleSubmit, form, submitting, pristine, values }) => {
+                        console.log(values)
+
+                        return (
                         <form onSubmit={handleSubmit}>
                             <div className={Style.horizontal}>
-                                <div>
+                                <Field name="customerEmail">
+                                {({input,meta})=><div>
+                                    {meta.error && meta.touched ? <div className={Style.warnings}>{meta.error}</div> : ""}
                                     <div className={Style.label}>
-                                        <Field component="input" type="checkbox" className={Style.checkbox} name="contact" value="email" />
+                                        <Field name="contact" type="checkbox" className={Style.checkbox} component="input" value="email" />
                                         <label>Twój adres email:</label>
                                     </div>
-                                    <Field component="input" name="customerEmail" type="text" placeholder="Email" />
-                                </div>
-                                <div>
+                                    <input {...input} type="text" placeholder="Email" />
+                                </div>}
+                                </Field>
+                                <Field name="customerName" validate={composeValidators(required,validSubject)}>
+                                    {({input,meta})=><div>
+                                    {meta.error && meta.touched ? <div className={Style.warnings}>{meta.error}</div> : ""}
                                     <div className={Style.label}>
                                         <div>Twoje Imię i Nazwisko:</div>
                                     </div>
-                                    <Field component="input" name="customerName" type="text" placeholder="Imię i Nazwisko" />
-                                </div>
-                                <div>
+                                    <input {...input} type="text" placeholder="Imię i Nazwisko" />
+                                </div>}
+                                </Field>
+                                
+                                <Field name="customerPhone">
+                                {({input,meta})=><div>
+                                    {meta.error && meta.touched ? <div className={Style.warnings}>{meta.error}</div> : ""}
                                     <div className={Style.label}>
-                                        <Field component="input" type="checkbox" className={Style.checkbox} name="contact" value="phone" />
+                                        <Field component="input" type="checkbox" className={Style.checkbox} name="contact" value="phone" {...values.customerPhone?{"checked":"checked"}:{}}/>
                                         <label>Twój Numer telefonu:</label>
                                     </div>
-                                    <Field name="customerPhone" component="input" type="text" placeholder="Numer telefonu" />
-                                </div>
+                                    <input {...input} type="text" placeholder="Numer telefonu" />
+                                </div>}
+                                </Field>
+                                
                             </div>
                             <div className={Style.horizontal}>
                                 
@@ -241,12 +182,16 @@ class Message extends React.Component {
                             <div className={Style.horizontal}>
                                 <div className={Style.buttonContainer}>
                                     <button className={Style.button} disabled={submitting || pristine} type="submit">Wyslij wiadomosc</button>
-                                    <button className={Style.button} disabled={submitting || pristine} type="button" onClick={form.reset}>Wyczyść wszystkie pola</button>
+                                    <button className={Style.button} disabled={submitting || pristine} type="button" onClick={()=>{
+                                        form.getRegisteredFields().forEach(value => {
+                                            form.resetFieldState(value);
+                                        });
+                                        form.reset();
+                                        }} ref={this.resetFormButton}>Wyczyść wszystkie pola</button>
                                 </div>
                             </div>
-                            <pre>{JSON.stringify(values, 0, 2)}</pre>
                         </form>
-                    )}
+                    )}}
                 />
                 {loadingScreen}
             </div>
