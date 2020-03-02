@@ -9,6 +9,7 @@ import Contact from './components/contact/Contact';
 import Gallery from './components/gallery/Gallery';
 import About from './components/about/About';
 import Login from './Login';
+import LoginNew from './LoginNew/LoginNew';
 
 class App extends React.Component {
 
@@ -40,6 +41,9 @@ class App extends React.Component {
             <Route path="/about" component={About} />
             <Route path="/login" >
               <Login setUser={this.props.setUser} />
+              </Route>
+              <Route path="/login-new" >
+              <LoginNew />
               </Route>            
           </Switch>
       </div>

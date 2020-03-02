@@ -4,9 +4,14 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import pl.eschenholz.api.entity.Photo;
 import pl.eschenholz.api.entity.User;
 import pl.eschenholz.api.enums.PhotoCategory;
@@ -20,11 +25,16 @@ import java.util.Date;
 import java.util.Optional;
 
 @RestController
+@EnableAsync
 public class MainRestController {
 
     @Autowired
-    UserService service;
+    private UserService service;
 
+    @Autowired
+    private TaskExecutor taskExecutor;
+
+    private static ListenableFuture<String> a;
 
     @PostMapping("/api/login")
     @CrossOrigin
@@ -69,10 +79,12 @@ public class MainRestController {
     }
 
     @GetMapping("/test1")
-    public ArrayList<Photo> test1(){
-        ArrayList<Photo> abc = new ArrayList<Photo>();
-        abc.add(new Photo(null,"zdjecie","/static/favicon.ico","desc","", PhotoCategory.STAIRS, LocalDateTime.now()));
-        return abc;
+    public String test1(){
+        RestTemplateBuilder b = new RestTemplateBuilder();
+        RestTemplate build = b.build();
+        String a = build.getForObject("https://docs.spring.io/autorepo/docs/spring-framework/3.2.x/spring-framework-reference/html/scheduling.html",String.class);
+        System.out.println(a);
+        return a;
     }
     @GetMapping("/test2")
     public ArrayList<Photo> test2(){

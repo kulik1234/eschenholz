@@ -1,8 +1,43 @@
 .main {
     text-align: center;
 }
-.main > form > div {
-}
 .main > form > div > input {
     margin: 10px;
+}
+.smallLoginContainer {
+        border: 3px solid #bbaa44;
+        border-radius: 10px;
+        padding: 30px;
+        width: auto;
+        margin: auto;
+        background-color: #9993;
+}
+input,select {
+    border-color: #bbaa44;
+    border-radius: 20px;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    padding: 10px 15px;
+    margin: 5px;
+    background-color:#ffcc66;
+}
+select {
+    padding:4px 0px 4px 4px;
+    cursor: pointer;
+}
+input:focus {
+   background-color:  	#eebb55;
+   border-bottom-color: #aa9922;
+   outline: none;
+}
+input[type="submit"],input[type="reset"]{
+    cursor: pointer;
+    padding: 10px 40px;
+    text-transform: uppercase;
+}
+input:disabled {
+    background-color:  	#eebb55;
+   border-bottom-color: #aa992244;
+   filter:grayscale(40%);
 }

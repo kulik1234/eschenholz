@@ -25,8 +25,6 @@ class Message extends React.Component {
             loadingErrors: []
 
         };
-        this.loading = React.createRef();
-        this.resetFormButton = React.createRef();
         this.sendMessage = this.sendMessage.bind(this);
         this.rm = this.rm.bind(this);
 
@@ -94,6 +92,7 @@ class Message extends React.Component {
 
                     }}
 
+                    initialValues={{ wyslij: 'wyślij',resetuj: "resetuj" }}
 
                     validate={(values)=>{
                         
@@ -114,8 +113,6 @@ class Message extends React.Component {
                     }}
 
                     render={({ handleSubmit, form, submitting, pristine, values }) => {
-                        console.log(values)
-
                         return (
                         <form onSubmit={handleSubmit}>
                             <div className={Style.horizontal}>
@@ -171,7 +168,8 @@ class Message extends React.Component {
                                 {({ input, meta }) =>
                                     <div>
                                         {meta.error && meta.touched ? <div className={Style.warnings}>{meta.error}</div> : ""}
-                                        <div className={Style.textareaParent}>
+                                        <div className={form.getFieldState("content")?form.getFieldState("content").active?Style.textareaParent + " "+ Style.textareaParentFocus:Style.textareaParent:Style.textareaParent}>
+                                            
                                             <textarea {...input} className={Style.textarea} style={{ "resize": "none", "border": "none" }} placeholder="Tutaj wpisz treść wiadomości" ></textarea>
                                             <div className={Style.counter}><span>{values.content !== undefined ? values.content.toString().length : 0}</span>/250</div>
                                         </div>
@@ -181,13 +179,14 @@ class Message extends React.Component {
 
                             <div className={Style.horizontal}>
                                 <div className={Style.buttonContainer}>
-                                    <button className={Style.button} disabled={submitting || pristine} type="submit">Wyslij wiadomosc</button>
-                                    <button className={Style.button} disabled={submitting || pristine} type="button" onClick={()=>{
+                                <Field component="input" type="submit" name="wyslij" />
+                                <Field component="input" type="reset" name="resetuj" onClick={()=>{
+
                                         form.getRegisteredFields().forEach(value => {
                                             form.resetFieldState(value);
                                         });
                                         form.reset();
-                                        }} ref={this.resetFormButton}>Wyczyść wszystkie pola</button>
+                                        }}/>
                                 </div>
                             </div>
                         </form>

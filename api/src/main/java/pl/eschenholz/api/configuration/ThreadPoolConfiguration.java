@@ -1,4 +1,4 @@
-package pl.eschenholz.api;
+package pl.eschenholz.api.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,11 +16,16 @@ public class ThreadPoolConfiguration {
     @Value("8")
     int maxPoolSize;
 
+    @Value("eschenholz_api_")
+    String ThreadNamePrefix;
+
     @Bean
     public ThreadPoolTaskExecutor  taskExecutor() {
         ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
         pool.setCorePoolSize(corePoolSize);
         pool.setMaxPoolSize(maxPoolSize);
+        pool.setThreadNamePrefix(ThreadNamePrefix);
+        pool.initialize();
         return pool;
     }
 }

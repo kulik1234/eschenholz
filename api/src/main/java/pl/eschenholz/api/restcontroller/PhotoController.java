@@ -14,6 +14,7 @@ import java.util.Optional;
 
 
 @RestController
+@RequestMapping("/api")
 public class PhotoController {
 
 
@@ -29,7 +30,7 @@ public class PhotoController {
     }
 
 
-    @GetMapping(Enpoints.PHOTO_ENDPOINT)
+    @GetMapping("/photo")
     @CrossOrigin
     public Iterable<Photo> getAll(
             @RequestParam(defaultValue = "1") Integer pageNo,
@@ -53,13 +54,13 @@ public class PhotoController {
     }
 
 
-    @GetMapping(Enpoints.PHOTO_ENDPOINT_WITH_PATHVARIABLE)
+    @GetMapping("/photo/{id}")
     @CrossOrigin
     public Optional<Photo> getById(@PathVariable("id") Long id){
         return service.findById(id);
     }
 
-    @GetMapping(Enpoints.PHOTO_ENDPOINT_WITH_CATEGORY_AND_PATHVARIABLE)
+    @GetMapping("/photo/category/{category}")
     @CrossOrigin
     public Iterable<Photo> getByCategory(
             @PathVariable("category") PhotoCategory category,
@@ -84,12 +85,12 @@ public class PhotoController {
 
     }
 
-    @PutMapping(Enpoints.PHOTO_ENDPOINT)
+    @PutMapping("/photo")
     @CrossOrigin
     public Photo insertPhoto(
             @RequestParam("file") MultipartFile file,
             @RequestParam("nameOrTitle") String nameOrTitle,
-            @RequestParam("descritpion") String descritpion,
+            @RequestParam("description") String description,
             @RequestParam("path") String path,
             @RequestParam("author") String author,
             @RequestParam("category") PhotoCategory category,
@@ -97,16 +98,16 @@ public class PhotoController {
     ){
         String fileName = storageService.store(file);
         LocalDateTime time = LocalDateTime.parse(date);
-        Photo photo = new Photo(null,nameOrTitle,path+"/"+fileName,descritpion,author,category,time);
+        Photo photo = new Photo(null,nameOrTitle,path+"/"+fileName,description,author,category,time);
        return service.save(photo);
     }
 
-    @PostMapping(Enpoints.PHOTO_ENDPOINT)
+    @PostMapping("/photo")
     public Photo updatePhoto(@RequestBody Photo p){
         return service.findById(p.getId()).orElse(service.save(p));
     }
 
-    @DeleteMapping(Enpoints.PHOTO_ENDPOINT)
+    @DeleteMapping("/photo")
     public void removePhoto(@RequestBody Photo p){
         service.delete(p);
     }
