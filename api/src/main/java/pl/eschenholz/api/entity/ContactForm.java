@@ -1,5 +1,6 @@
 package pl.eschenholz.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import pl.eschenholz.api.enums.ContactFormStatus;
 
@@ -15,8 +16,10 @@ public class ContactForm extends Base{
 
     private String subject;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Boolean ifEmail;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Boolean ifPhone;
 
     @NotNull
@@ -25,6 +28,14 @@ public class ContactForm extends Base{
     private Long customerId;
 
     private ContactFormStatus status;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY,value = "name")
+    private String customerFirstName;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY,value = "surname")
+    private String customerLastName;
 
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -53,6 +64,16 @@ public class ContactForm extends Base{
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.customerPhone = customerPhone;
+    }
+
+    public ContactForm(Long id, String subject, @NotNull String content, ContactFormStatus status, String customerFirstName, String customerLastName,Long customerId) {
+        this.id = id;
+        this.subject = subject;
+        this.content = content;
+        this.status = status;
+        this.customerFirstName = customerFirstName;
+        this.customerLastName = customerLastName;
+        this.customerId = customerId;
     }
 
     public Long getId() {

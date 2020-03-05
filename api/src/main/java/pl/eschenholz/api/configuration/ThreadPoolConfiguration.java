@@ -25,6 +25,7 @@ public class ThreadPoolConfiguration {
         pool.setCorePoolSize(corePoolSize);
         pool.setMaxPoolSize(maxPoolSize);
         pool.setThreadNamePrefix(ThreadNamePrefix);
+        pool.setQueueCapacity(1500);
         pool.initialize();
         return pool;
     }

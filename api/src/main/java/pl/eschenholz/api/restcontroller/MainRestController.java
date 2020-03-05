@@ -4,28 +4,25 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import pl.eschenholz.api.entity.Photo;
 import pl.eschenholz.api.entity.User;
 import pl.eschenholz.api.enums.PhotoCategory;
 import pl.eschenholz.api.exception.UserNotFoundException;
 import pl.eschenholz.api.exception.UserWrongPasswordException;
+import pl.eschenholz.api.service.MultiThreadService;
 import pl.eschenholz.api.service.UserService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
-@EnableAsync
 public class MainRestController {
 
     @Autowired
@@ -34,7 +31,11 @@ public class MainRestController {
     @Autowired
     private TaskExecutor taskExecutor;
 
-    private static ListenableFuture<String> a;
+    private final MultiThreadService ser;
+
+    MainRestController(MultiThreadService service){
+        this.ser = service;
+    }
 
     @PostMapping("/api/login")
     @CrossOrigin
@@ -78,12 +79,13 @@ public class MainRestController {
         return service.save(user);
     }
 
-    @GetMapping("/test1")
-    public String test1(){
-        RestTemplateBuilder b = new RestTemplateBuilder();
-        RestTemplate build = b.build();
-        String a = build.getForObject("https://docs.spring.io/autorepo/docs/spring-framework/3.2.x/spring-framework-reference/html/scheduling.html",String.class);
-        System.out.println(a);
+    @GetMapping("/test1/{user}")
+    public String[] test1(@PathVariable String user) throws  InterruptedException, ExecutionException {
+        CompletableFuture<String> stringCompletableFuture = ser.findUser(user);
+        CompletableFuture<String> stringCompletableFuture1 = ser.findUser("bykowski");
+        String str = stringCompletableFuture.get();
+        String abc = stringCompletableFuture1.get();
+        String[] a = {str,abc};
         return a;
     }
     @GetMapping("/test2")
