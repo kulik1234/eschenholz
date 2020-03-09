@@ -3,6 +3,7 @@ import Dropzone from './Dropzone';
 import Style from './css/UploadImageStyles.module.css';
 import FileElement from './FileElement';
 import config from '../../../messages/messages';
+import { configOptions } from 'final-form';
 
 class UploadImage extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class UploadImage extends React.Component {
       }
     }
 
-    async uploadFiles(){
+    /*async uploadFiles(){
       this.setState({ uploadProgress: {}, uploading: true });
       const promises = [];
       this.state.files.forEach(file => {
@@ -43,15 +44,37 @@ class UploadImage extends React.Component {
         promises.push(p);
       });
       try {
-        for await(const promise of promises){
-          Promise.resolve(promise);
-        }
+          await Promise.all(promises);
         
         this.setState({ successfullUploaded: true, uploading: false });
       } catch (e) {
         // Not Production ready! Do some error handling here instead...
         this.setState({ successfullUploaded: true, uploading: false });
         console.log(e);
+     //   e.onerror = e=>console.log("dupa");
+      //  e.onloadend = e=>console.log(e);
+      }
+    }*/
+    async uploadFiles(){
+      this.setState({ uploadProgress: {}, uploading: true });
+      const promises = [];
+      this.state.files.forEach(file => {
+        let prom = this.sendRequest(file);
+        prom
+        .then(p=>p.onloadend=(e)=>{
+          console.log(e);
+          this.addPhotoUp(JSON.parse(e.explicitOriginalTarget.responseText));
+        })
+        .catch(p=>p.onloadend=e=>console.log(e.explicitOriginalTarget.responseText));  
+        promises.push(prom);
+      });
+      try {
+        await Promise.all(promises);
+
+        this.setState({ successfullUploaded: true, uploading: false });
+      } catch (e) {
+        // Not Production ready! Do some error handling here instead...
+        this.setState({ successfullUploaded: true, uploading: false });
       }
     }
 
@@ -61,7 +84,9 @@ class UploadImage extends React.Component {
       return new Promise((resolve, reject) => {
        const req = new XMLHttpRequest();
        req.open("PUT", config.HOST+"/api/photo");
-       req.upload.addEventListener("progress", event => {
+       req.setRequestHeader("Authorization",
+      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsImlzcyI6ImF1dGgwIiwibG9naW4iOiJkdXBhIiwiZXhwIjoxNTgzNzUzMjE2LCJpYXQiOjE1ODM3NTIzMTZ9.KTVZZsbWhXYPx_3KVZedS5dziamqqDiMtRbNieD5VU9HD3Dq05BuTpOj8iZNjWBGWkr8zuBQgcY1jBWCSZuMeQ");
+      req.upload.addEventListener("progress", event => {
         if (event.lengthComputable) {
          const copy = { ...this.state.uploadProgress };
          copy[file.name] = {
@@ -87,10 +112,10 @@ class UploadImage extends React.Component {
        });
        
        const formData = new FormData();
-       formData.append("file", file, file.name);
+       formData.append("file",file,file.name);
        formData.append("nameOrTitle","test");
        formData.append("path","/uploaded");
-       formData.append("descritpion","to jest zdjecie testowe");
+       formData.append("description","to jest zdjecie testowe");
        formData.append("author","tester");
        formData.append("category",this.props.category);
        formData.append("date","1999-12-24T12:00:00");

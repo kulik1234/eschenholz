@@ -27,7 +27,7 @@ class Message extends React.Component {
         };
         this.sendMessage = this.sendMessage.bind(this);
         this.rm = this.rm.bind(this);
-
+        this.resetForm = React.createRef();
     }
 
 
@@ -48,7 +48,7 @@ class Message extends React.Component {
                 })
                 .then(resp => {
                     this.setState({ data: resp, loadingScreenType: "success" ,loadingScreenMessage: "Wiadomość została wysłana"});
-                    this.resetFormButton.current.click();
+                    this.resetForm.current.children[1].click();
                 })
                 .catch(err => {
                     console.log(err);
@@ -178,7 +178,7 @@ class Message extends React.Component {
                             </Field>
 
                             <div className={Style.horizontal}>
-                                <div className={Style.buttonContainer}>
+                                <div className={Style.buttonContainer} ref={this.resetForm}>
                                 <Field component="input" type="submit" name="wyslij" />
                                 <Field component="input" type="reset" name="resetuj" onClick={()=>{
 
