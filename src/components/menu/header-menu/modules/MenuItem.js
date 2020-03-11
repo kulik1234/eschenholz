@@ -13,9 +13,9 @@ class MenuItem extends Component {
    
   render() {
     return (
-      <div className={this.props.companyName ? MenuItemStyle.companyName + " " + MenuItemStyle.main : MenuItemStyle.main}
+      <div className={(this.props.companyName ? MenuItemStyle.companyName + " " + MenuItemStyle.main: MenuItemStyle.main)+ " " + this.props.cls}
         onClick={() => this.ref.current.click()}>
-  <span>{this.props.value}</span>
+        <span>{this.props.value}</span>
         <Link ref={this.ref} to={this.props.to} className={AppStyle.displayNone}>{this.props.value}</Link>
       </div>
     );

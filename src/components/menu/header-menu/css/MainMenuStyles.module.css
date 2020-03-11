@@ -1,11 +1,53 @@
-.main {
+.main{
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
+
+.container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.menu {
+    display: flex;
+    flex: 1;
+}
+
+
 @media only screen and (max-width: 600px) {
     .main {
         justify-content: start;
+    }
+    .burgerCheckbox[type="checkbox"]:checked + .container .burger {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+    }
+    .burgerCheckbox[type="checkbox"]:checked ~ .container {
+        position: fixed;
+        background-color: yellow;
+        height: 100vh;
+        width: 100vw;
+        top: 0px;
+        left: 0px;
+        z-index: 10;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .burgerCheckbox[type="checkbox"]:checked ~ .container .companyName {
+        margin: auto;
+
+    }
+    .companyName {
+        display: block;
+    }
+    .menu .item{
+        display: none;
+    }
+    .burgerCheckbox[type="checkbox"]:checked ~ .container .item {
+        display: block;
+    }
+    .burgerCheckbox[type="checkbox"]:checked ~ .container .menu {
+        display: block;
     }
   }

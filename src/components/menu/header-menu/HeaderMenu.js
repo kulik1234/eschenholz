@@ -6,16 +6,26 @@ import MenuItem from './modules/MenuItem';
 
 class HeaderMenu extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.burger = React.createRef();
+  }
 
   render() {
     return (
       <div className={MenuStyle.main}>
-        <Burger />
-          <MenuItem value="o firmie" to="/about" label="about" />
-          <MenuItem value="oferta" activeOnlyWhenExact={true} to="/offert" label="home"/>
-          <MenuItem value="ESCHENHOLZ" companyName="1" to="/" label="home"/>
-          <MenuItem value="kontakt" to="/contact" label="contact"/>
-          <MenuItem value="galeria" to="/gallery" label="gallary"/>
+        <input className={MenuStyle.burgerCheckbox} type="checkbox" hidden ref={this.burger}></input>
+        <div className={MenuStyle.container}>
+          <div className={MenuStyle.menu}>
+          <Burger click={() => { this.burger.current.click() }} cls={MenuStyle.burger}/>
+            <MenuItem value="ESCHENHOLZ" companyName="1" to="/" label="home" cls={MenuStyle.companyName} />
+            <MenuItem value="o firmie" to="/about" label="about" cls={MenuStyle.item}/>
+            <MenuItem value="oferta" activeOnlyWhenExact={true} to="/offert" label="home" cls={MenuStyle.item}/>
+            <MenuItem value="kontakt" to="/contact" label="contact" cls={MenuStyle.item}/>
+            <MenuItem value="galeria" to="/gallery" label="gallary" cls={MenuStyle.item} />
+          </div>
+        </div>
       </div>
     );
   }
