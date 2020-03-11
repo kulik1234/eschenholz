@@ -5,6 +5,7 @@ import UploadImage from './UploadImage';
 import FullPhoto from './FullPhoto';
 import Style from './css/SubGalleryStyles.module.css';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
+import {UserContext} from '../../../';
 
 class SubGallery extends React.Component {
 
@@ -16,7 +17,7 @@ class SubGallery extends React.Component {
         loading: false,
         fullPhoto: false,
         currentPhoto: null,
-        canUpload: true,
+        canUpload: false,
         showUpload: false
           };
 
@@ -32,6 +33,13 @@ class SubGallery extends React.Component {
 
 
     componentDidMount(){
+      try{
+        if(UserContext.Consumer._currentValue.user.userRole === "ROLE_ADMIN"&&UserContext.Consumer._currentValue.user.loginToken.length>20){
+          this.setState({canUpload: true});
+        }
+        else {
+        }} catch (e) {
+        }
         this.loadPhotos("/category/"+this.props.category);
     }
     loadPhotos(parameter){

@@ -4,6 +4,8 @@ import Style from './css/UploadImageStyles.module.css';
 import FileElement from './FileElement';
 import config from '../../../messages/messages';
 import { configOptions } from 'final-form';
+import {UserContext} from '../../../';
+import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 
 class UploadImage extends React.Component {
   constructor(props) {
@@ -13,7 +15,8 @@ class UploadImage extends React.Component {
       uploading: false,
       uploadProgress: {},
       successfullUploaded: false,
-      responsePhoto: {}
+      responsePhoto: {},
+      error: undefined
     };
 
     this.onFilesAdded = this.onFilesAdded.bind(this);
@@ -62,8 +65,15 @@ class UploadImage extends React.Component {
         let prom = this.sendRequest(file);
         prom
         .then(p=>p.onloadend=(e)=>{
-          console.log(e);
-          this.addPhotoUp(JSON.parse(e.explicitOriginalTarget.responseText));
+          let resp = JSON.parse(e.explicitOriginalTarget.responseText);
+          console.log(resp);
+          if(resp.error === undefined){
+            this.addPhotoUp(resp);
+          }
+          else {
+            console.log(resp.error);
+            this.setState({error:resp.error});
+          }
         })
         .catch(p=>p.onloadend=e=>console.log(e.explicitOriginalTarget.responseText));  
         promises.push(prom);
@@ -84,9 +94,14 @@ class UploadImage extends React.Component {
       return new Promise((resolve, reject) => {
        const req = new XMLHttpRequest();
        req.open("PUT", config.HOST+"/api/photo");
-       req.setRequestHeader("Authorization",
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiUk9MRV9BRE1JTiIsImlzcyI6ImF1dGgwIiwibG9naW4iOiJkdXBhIiwiZXhwIjoxNTgzNzUzMjE2LCJpYXQiOjE1ODM3NTIzMTZ9.KTVZZsbWhXYPx_3KVZedS5dziamqqDiMtRbNieD5VU9HD3Dq05BuTpOj8iZNjWBGWkr8zuBQgcY1jBWCSZuMeQ");
-      req.upload.addEventListener("progress", event => {
+       try{
+        req.setRequestHeader("Authorization",
+        "Bearer "+UserContext.Consumer._currentValue.user.loginToken);
+        
+       } catch (e) {
+         //console.log(e);
+       }
+       req.upload.addEventListener("progress", event => {
         if (event.lengthComputable) {
          const copy = { ...this.state.uploadProgress };
          copy[file.name] = {
@@ -163,9 +178,10 @@ class UploadImage extends React.Component {
               </div>
               <div className={Style.center+" "+Style.main}>
             <button onClick={this.clearFileList}>Wyczysc</button><button onClick={this.uploadFiles}>Wyslij</button>
-              </div>
+              </div>{this.state.error ? <LoadingScreen type="error" content={this.state.error}/> : ""}
           </div>
         </div>
+        
       );
     }
   }

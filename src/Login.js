@@ -81,7 +81,7 @@ class Login extends React.Component {
             <Form
                 onSubmit={(e) => {
                     this.sendLogin(e);
-                    console.log(e);
+                    //console.log(e);
                     
 
 

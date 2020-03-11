@@ -34,6 +34,10 @@ public class JwtFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
         String header = request.getHeader("Authorization");
         UsernamePasswordAuthenticationToken authResult = getAuthenticationByToken(header);
         //if(authResult == null) throw new UserNotLoggedInException();
