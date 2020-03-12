@@ -25,6 +25,10 @@ class HeaderMenu extends Component {
             <MenuItem value="kontakt" to="/contact" label="contact" cls={MenuStyle.item}/>
             <MenuItem value="galeria" to="/gallery" label="gallary" cls={MenuStyle.item} />
           </div>
+        <div className={MenuStyle.username}>
+        {this.props.user!==undefined&&this.props.user!==null?
+      <h5>{this.props.user.login}</h5>:""}
+        </div>
         </div>
       </div>
     );

@@ -11,7 +11,9 @@
     display: flex;
     flex: 1;
 }
-
+.username {
+    padding: 5px;
+}
 
 @media only screen and (max-width: 600px) {
     .main {
@@ -37,6 +39,9 @@
     .burgerCheckbox[type="checkbox"]:checked ~ .container .companyName {
         margin: auto;
 
+    }
+    .burgerCheckbox[type="checkbox"]:checked ~ .container .username {
+       display: none;
     }
     .companyName {
         display: block;

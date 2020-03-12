@@ -18,3 +18,27 @@
     flex-direction: column;
     justify-content: center;
 }
+@media only screen and (max-width: 600px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .container .subcontainer {
+        margin: 10px;
+    }
+
+
+}
+@media only screen and (max-width: 1200px) { 
+    .container {
+        width: 100vw;
+    }
+    .main {
+        display: block;
+        overflow: hidden;
+    }
+    .background {
+        display: flex;
+    }
+
+}

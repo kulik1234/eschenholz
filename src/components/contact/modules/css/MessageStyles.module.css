@@ -88,3 +88,37 @@ textarea {
 .warnings > div{
     padding: 5px;
 }
+@media only screen and (max-width: 1200px) { 
+    .horizontal {
+        display: block;
+        flex-wrap: wrap;
+        text-align: center;
+        margin: 0px;
+    }
+    textarea {
+        width: calc(100vw - 20px);
+    }
+    .textareaParent {
+        width: 100vw;
+        max-width: 800px;
+        min-width: 200px;
+    }
+    input[name="subject"] {
+        width: 25em;
+    }
+}
+@media only screen and (max-width: 600px) { 
+    .horizontal > div {
+        margin: 0px;
+        paddign: 0px;
+    }
+    input {
+        margin: 3px 0px !important;
+    }
+    input[type="reset"],input[type="submit"] {
+        margin: 3px 3px !important;
+    }
+    input[name="subject"] {
+        width: auto;
+    }
+}

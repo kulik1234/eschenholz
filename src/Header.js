@@ -7,7 +7,7 @@ class Header extends Component {
     return (
       <div id="header">
         <div className={HeaderStyles.main}>
-        <HeaderMenu CompanyName="Eschenholz"/>
+        <HeaderMenu CompanyName="Eschenholz" user={this.props.user}/>
       </div>
       </div>
       

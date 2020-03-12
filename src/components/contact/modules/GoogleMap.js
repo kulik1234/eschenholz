@@ -3,7 +3,7 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
 import Style from './css/GoogleMapStyles.module.css';
 
 const mapStyles = {
-    width: '1000px',
+    width: '1000wv',
     height: '600px'
   };
   
@@ -11,7 +11,7 @@ const mapStyles = {
     position: 'relative',
     overflow: 'hidden',
     height: '600px',
-    width: '1000px',
+    width: '1000wv',
     margin: '10px auto 0px'
   } //"position:relative;overflow:hidden;height:600px;width:1000px;margin:10px auto 0px;"
 

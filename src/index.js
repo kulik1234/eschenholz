@@ -13,9 +13,9 @@ const Main = ()=>{
   const [user,setUser] = useState(UserContext.user);
   return (<React.Fragment>
   <BrowserRouter>
-      <Header />
+      <Header user={user}/>
       <App setUser={setUser} user={user}/>
-      <Footer user={user}/>
+      <Footer/>
   </BrowserRouter>
 </React.Fragment>);
 }
