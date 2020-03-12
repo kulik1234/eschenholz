@@ -23,7 +23,7 @@ input,select {
     background-color:#ffcc66;
 }
 select {
-    padding:4px 0px 4px 4px;
+    padding:10px 20px;
     cursor: pointer;
 }
 input:focus {

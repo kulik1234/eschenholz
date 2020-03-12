@@ -3,7 +3,6 @@ import Dropzone from './Dropzone';
 import Style from './css/UploadImageStyles.module.css';
 import FileElement from './FileElement';
 import config from '../../../messages/messages';
-import { configOptions } from 'final-form';
 import {UserContext} from '../../../';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 

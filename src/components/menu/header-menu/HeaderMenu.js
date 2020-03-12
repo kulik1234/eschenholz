@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import MenuStyle from './css/MainMenuStyles.module.css';
 import Burger from './modules/Burger';
 import MenuItem from './modules/MenuItem';
-
+import {
+  Link
+} from "react-router-dom";
 
 class HeaderMenu extends Component {
 
@@ -27,7 +29,7 @@ class HeaderMenu extends Component {
           </div>
         <div className={MenuStyle.username}>
         {this.props.user!==undefined&&this.props.user!==null?
-      <h5>{this.props.user.login}</h5>:""}
+      <h5 className={MenuStyle.link}><Link to="/logout">Wyloguj | </Link><Link to="/manage">{this.props.user.login}</Link></h5>:""}
         </div>
         </div>
       </div>

@@ -4,8 +4,7 @@ import config from './messages/messages';
 import { UserContext } from '.';
 import { Redirect } from 'react-router-dom';
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
-import { configOptions } from 'final-form';
-import { Form, Field,useField} from 'react-final-form'
+import { Form, Field} from 'react-final-form'
 
 
 class Login extends React.Component {

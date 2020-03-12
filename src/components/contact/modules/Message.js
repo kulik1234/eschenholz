@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Style from './css/MessageStyles.module.css';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 import messages from '../../../messages/messages';
-import { Form, Field,useField} from 'react-final-form'
+import { Form, Field} from 'react-final-form'
 
 const validSubject = value => (messages.POLISH_CHARS_REGEXP_50.test(value) ? undefined : 'Pole jest wypełnione błednie');
 const validContent = value => (messages.POLISH_CHARS_REGEXP_250.test(value) ? undefined : "Treść wiadomości jest niepoprawna");
