@@ -4,13 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.eschenholz.api.entity.Photo;
-import pl.eschenholz.api.enums.Enpoints;
 import pl.eschenholz.api.enums.PhotoCategory;
+import pl.eschenholz.api.exception.PhotoNotFoundException;
 import pl.eschenholz.api.service.FileSystemStorageService;
 import pl.eschenholz.api.service.PhotoService;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 
 @RestController
@@ -56,8 +55,10 @@ public class PhotoController {
 
     @GetMapping("/photo/{id}")
     @CrossOrigin
-    public Optional<Photo> getById(@PathVariable("id") Long id){
-        return service.findById(id);
+    public Photo getById(@PathVariable("id") Long id) throws PhotoNotFoundException {
+        return service.findById(id).orElseThrow(() -> new PhotoNotFoundException(id));
+
+
     }
 
     @GetMapping("/photo/category/{category}")

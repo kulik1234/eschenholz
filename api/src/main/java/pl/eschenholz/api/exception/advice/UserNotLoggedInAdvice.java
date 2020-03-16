@@ -5,15 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import pl.eschenholz.api.exception.error.Error;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class UserNotLoggedInAdvice {
 
 
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<String> UserNotLoggedInHandler(){
-        System.out.println("dziala");
-        return new ResponseEntity<String>("nie zalogowano",HttpStatus.FORBIDDEN);
+    public Error UserNotLoggedInHandler(){
+        return new Error("nie zalogowano");
     }
 }

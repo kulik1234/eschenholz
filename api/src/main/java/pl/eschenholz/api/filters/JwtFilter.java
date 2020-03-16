@@ -45,7 +45,7 @@ public class JwtFilter extends BasicAuthenticationFilter {
         chain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthenticationByToken(String header) throws UserNotLoggedInException, WrongTokenException {
+    private UsernamePasswordAuthenticationToken getAuthenticationByToken(String header) throws WrongTokenException {
 
         try {
             DecodedJWT token;
@@ -58,8 +58,8 @@ public class JwtFilter extends BasicAuthenticationFilter {
 
         }
         catch (JWTVerificationException | NullPointerException e){
-          //  if(e instanceof NullPointerException) throw new UserNotLoggedInException();
-           // if(e instanceof JWTVerificationException) throw new WrongTokenException(e.getMessage());
+         //  if(e instanceof NullPointerException) throw new UserNotLoggedInException();
+          //  if(e instanceof JWTVerificationException) throw new WrongTokenException(e.getMessage());
             LoggerFactory.getLogger(JwtFilter.class).info("blad w filtrze: " + e.getMessage());
         }
         return null;// new UsernamePasswordAuthenticationToken("Anonymus",null, Collections.singleton(new SimpleGrantedAuthority("ROLE_ANONYMUS")));
