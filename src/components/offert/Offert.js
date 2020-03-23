@@ -12,8 +12,13 @@ class Offert extends React.Component {
               <div>
                 <UserContext.Consumer>
                   {(o)=>{
+                    try{
+                      console.log(o);
                     if(o.user!==null)
                     return "::::::::"+o.user.login+":::::";
+                    } catch (e ){
+                    }
+                    
                   }}
                 </UserContext.Consumer>
               </div>

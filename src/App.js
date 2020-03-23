@@ -46,9 +46,8 @@ class App extends React.Component {
             <Route path="/about" component={About} />
             <Route path="/logout">
               <UserContext.Consumer>
-                {(obj)=>{
-                  obj.user = null;
-                  this.usr(null);
+                {()=>{
+                  this.usr(undefined);
                   return <Redirect to="/"></Redirect>
                 }}
               </UserContext.Consumer>

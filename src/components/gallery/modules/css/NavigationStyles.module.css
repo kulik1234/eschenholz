@@ -1,11 +1,33 @@
+.main {
+    display: block;
+}
 .main a {
     padding: 10px;
+}
+.s {
+    display: flex;
+    max-width: 1200px;
+    flex-wrap: wrap;
+    place-content:center space-between;
 }
 .s a{
     color: black;
     display: block;
     border: 1px solid;
-    margin: 10px;
-    padding: 20px;
+    margin: 30px;
+    padding: 50px;
     text-decoration: none;
+}
+@media only screen and (max-width: 600px) {
+    .s {
+        display: block;
+        width: 100vw;
+        text-align: center;
+        position: relative;
+    }
+    .s a {
+        margin: 0px auto 30px;
+        padding: 20px;
+        width: 75%;
+    }
 }

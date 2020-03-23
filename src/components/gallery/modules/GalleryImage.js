@@ -15,7 +15,9 @@ class GalleryImage extends React.Component {
     render() {
       return (
         <div className={Style.main}>
-            <div className={Style.description}>{this.props.desc}</div>
+            <div className={Style.description}>{
+            //this.props.desc
+            }</div>
             <div className={Style.imageItem}>
                 <div>
                 <img src={this.props.src} 
@@ -24,12 +26,19 @@ class GalleryImage extends React.Component {
                     alt={this.props.alt}
                     onClick={this.props.show}
                     ></img>
-                <div className={Style.date}>{this.props.date.split("T")[0]}</div>
+                <div className={Style.date}>{
+                //this.props.date.split("T")[0]
+                }</div>
                   </div>                     
             </div>
             
-                <div>{this.props.category}</div>
-                <div>{this.props.name}</div>
+                <div>{
+                //this.props.category
+                }
+                </div>
+                <div>{
+                //this.props.name
+                }</div>
                 
         </div>
       );

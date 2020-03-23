@@ -5,6 +5,7 @@ import MenuItem from './modules/MenuItem';
 import {
   Link
 } from "react-router-dom";
+import {UserContext} from '../../../';
 
 class HeaderMenu extends Component {
 
@@ -28,8 +29,13 @@ class HeaderMenu extends Component {
             <MenuItem value="galeria" to="/gallery" label="gallary" cls={MenuStyle.item} />
           </div>
         <div className={MenuStyle.username}>
-        {this.props.user!==undefined&&this.props.user!==null?
-      <h5 className={MenuStyle.link}><Link to="/logout">Wyloguj | </Link><Link to="/manage">{this.props.user.login}</Link></h5>:""}
+          <UserContext.Consumer>
+            {
+              (obj)=>{
+                return (obj.user?<h5 className={MenuStyle.link}><Link to="/logout">Wyloguj | </Link><Link to="/manage">{obj.user.login}</Link></h5>:"");
+              }
+            }
+          </UserContext.Consumer>
         </div>
         </div>
       </div>

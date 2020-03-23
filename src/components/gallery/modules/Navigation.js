@@ -5,8 +5,7 @@ import Style from './css/NavigationStyles.module.css';
 class Navigation extends React.Component {
 
     render(){
-        let style = this.props.s?Style.s:"";
-        return <div className={Style.main+" "+style}>
+        return <div className={this.props.s?Style.s:Style.main}>
             {this.props.param.map(
                 (i,k)=>
                 {

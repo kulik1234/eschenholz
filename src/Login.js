@@ -25,7 +25,7 @@ class Login extends React.Component {
         }
 
 
-        this.setUserToFooter = this.props.setUser.bind(this);
+        this.setUserUp = this.props.setUser.bind(this);
         this.sendLogin = this.sendLogin.bind(this);
     }
 
@@ -52,7 +52,7 @@ class Login extends React.Component {
                 if (ok.login !== undefined) {
                     console.log(ok);
                     this.setState({ "user": ok, "errorMessage": "", "redirect": true });
-
+                    this.setUserUp(ok);
 
                 }
                 else {
@@ -62,18 +62,12 @@ class Login extends React.Component {
             .finally(r => {
                 this.setState({ "loggingIn": false });
             })
-
+            
     }
 
 
     render() {
         return <div className={Style.main}>
-            <UserContext.Consumer>
-                {(usr) => {
-                    usr.user = this.state.user;
-                    this.setUserToFooter(this.state.user);
-                }}
-            </UserContext.Consumer>
             {
                 this.state.redirect ? <Redirect to='/' /> : ""
             }
@@ -82,8 +76,6 @@ class Login extends React.Component {
                     this.sendLogin(e);
                     //console.log(e);
                     
-
-
                 }} 
 
                 initialValues={{ zaloguj: 'zaloguj' }}

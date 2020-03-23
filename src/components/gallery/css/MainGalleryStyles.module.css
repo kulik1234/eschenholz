@@ -5,3 +5,10 @@
     padding: 25px;
     
 }
+@media only screen and (max-width: 600px) {
+    .main {
+        padding: 0px;
+        max-width: 100vw;
+        overflow: hidden;
+    }
+}

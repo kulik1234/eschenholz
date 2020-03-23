@@ -25,6 +25,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.POST,"/api/login*").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/api/login*").permitAll()
                 .mvcMatchers(HttpMethod.GET,"/api/photo/**").permitAll()
+                .mvcMatchers(HttpMethod.GET,"/dupa-zbita").permitAll()
                 .mvcMatchers(HttpMethod.POST,"/api/photo/**").hasRole(admin_role)
                 .mvcMatchers(HttpMethod.PUT,"/api/photo/**").hasRole(admin_role)
                 .mvcMatchers(HttpMethod.DELETE,"/api/photo/**").hasRole(admin_role)
