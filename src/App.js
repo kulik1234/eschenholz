@@ -12,7 +12,7 @@ import About from './components/about/About';
 import Login from './Login';
 import LoginNew from './LoginNew/LoginNew';
 import Manage from './components/manage/Manage';
-import {UserContext} from './';
+import UserContext from './UserContext';
 
 class App extends React.Component {
 

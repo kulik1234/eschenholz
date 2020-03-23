@@ -1,6 +1,6 @@
 import React from 'react';
 import Style from './css/MainOffertStyles.module.css';
-import { UserContext } from '../..';
+import  UserContext from '../../UserContext';
 
 
 class Offert extends React.Component {

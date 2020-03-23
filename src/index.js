@@ -4,12 +4,10 @@ import App from './App';
 import Header from './Header';
 import Footer from './Footer';
 import { BrowserRouter } from 'react-router-dom';
-
-export const UserContext = React.createContext({
-  "user": "dupa zabita"
-});
+import UserContext from './UserContext';
 
 const Main = () => {
+  console.log(UserContext.Consumer._currentValue);
   const [usr, setUser] = useState(UserContext);
   return (<React.Fragment>
     <BrowserRouter>

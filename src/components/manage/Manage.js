@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserContext } from '../../';
+import  UserContext  from '../../UserContext';
 import Style from './css/ManageStyle.module.css';
 
 class Manage extends React.Component {

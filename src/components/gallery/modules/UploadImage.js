@@ -3,7 +3,7 @@ import Dropzone from './Dropzone';
 import Style from './css/UploadImageStyles.module.css';
 import FileElement from './FileElement';
 import config from '../../../messages/messages';
-import {UserContext} from '../../../';
+import UserContext from '../../../UserContext';
 import LoadingScreen from '../../LoadingScreen/LoadingScreen';
 
 class UploadImage extends React.Component {
