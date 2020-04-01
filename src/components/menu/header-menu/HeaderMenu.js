@@ -29,18 +29,12 @@ class HeaderMenu extends Component {
             <MenuItem value="galeria" to="/gallery" label="gallary" cls={MenuStyle.item} />
           </div>
         <div className={MenuStyle.username}>
-          <UserContext.Consumer>
-            {
-              (obj)=>{
-                return (obj.user.login?<h5 className={MenuStyle.link}><Link to="/logout">Wyloguj | </Link><Link to="/manage">{obj.user.login}</Link></h5>:"");
-              }
-            }
-          </UserContext.Consumer>
+            {this.context.ifSession()?<h5 className={MenuStyle.link}><Link to="/logout">Wyloguj | </Link><Link to="/manage">{this.context.user.login}</Link></h5>:""}
         </div>
         </div>
       </div>
     );
   }
 }
-
+HeaderMenu.contextType = UserContext;
 export default HeaderMenu;

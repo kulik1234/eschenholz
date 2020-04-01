@@ -33,8 +33,7 @@ class SubGallery extends React.Component {
 
 
     componentDidMount(){
-      console.log(this.context.user.id);
-      if(this.context.user.userRole==="ROLE_ADMIN"&&this.context.user.loginToken.length>20){
+      if(this.context.ifAdminSession()){
         this.setState({canUpload:true});
       }
       else
@@ -132,9 +131,6 @@ class SubGallery extends React.Component {
         return (
             <div onClick={this.hideUpload}>
                 <div >
-                    <UserContext.Consumer>
-                      {(obj => console.log(obj))}
-                    </UserContext.Consumer>
                     {this.props.name}
                 </div>
                 {this.state.loading ? "loading..." : ""}

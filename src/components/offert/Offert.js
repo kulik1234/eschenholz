@@ -10,24 +10,12 @@ class Offert extends React.Component {
             <div>
               OFERTA
               <div>
-                <UserContext.Consumer>
-                  {(o)=>{
-                    try{
-                      console.log(o);
-                    if(o.user!==null)
-                    return "::::::::"+o.user.login+":::::";
-                    } catch (e ){
-                    }
-                    
-                  }}
-                </UserContext.Consumer>
+                {this.context.ifSession()?<div>::::::::{this.context.user.login}:::::</div>:""}
               </div>
             </div>
-          
-          
           </div>
       );
     }
   }
-  
+  Offert.contextType = UserContext;
   export default Offert;

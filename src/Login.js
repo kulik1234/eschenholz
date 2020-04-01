@@ -1,11 +1,10 @@
 import React from 'react';
 import Style from './app_style/MainLoginStyle.module.css';
 import config from './messages/messages';
-import { UserContext } from '.';
 import { Redirect } from 'react-router-dom';
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 import { Form, Field} from 'react-final-form'
-
+import UserContext from './UserContext';
 
 class Login extends React.Component {
 
@@ -24,8 +23,6 @@ class Login extends React.Component {
 
         }
 
-
-        this.setUserUp = this.props.setUser.bind(this);
         this.sendLogin = this.sendLogin.bind(this);
     }
 
@@ -52,7 +49,7 @@ class Login extends React.Component {
                 if (ok.login !== undefined) {
                     console.log(ok);
                     this.setState({ "user": ok, "errorMessage": "", "redirect": true });
-                    this.setUserUp(ok);
+                    this.context.setUser(ok);
 
                 }
                 else {
@@ -62,20 +59,17 @@ class Login extends React.Component {
             .finally(r => {
                 this.setState({ "loggingIn": false });
             })
-            
     }
 
 
     render() {
-        return <div className={Style.main}>
+        return (<div className={Style.main}>
             {
                 this.state.redirect ? <Redirect to='/' /> : ""
             }
             <Form
                 onSubmit={(e) => {
                     this.sendLogin(e);
-                    //console.log(e);
-                    
                 }} 
 
                 initialValues={{ zaloguj: 'zaloguj' }}
@@ -98,10 +92,10 @@ class Login extends React.Component {
                 </form>} />
 
             {this.state.loggingIn ? <LoadingScreen /> : ""}
-        </div>;
+        </div>);
     }
 }
 
-
+Login.contextType = UserContext;
 
 export default Login;

@@ -10,7 +10,7 @@ import Contact from './components/contact/Contact';
 import Gallery from './components/gallery/Gallery';
 import About from './components/about/About';
 import Login from './Login';
-import LoginNew from './LoginNew/LoginNew';
+import NotFound from './LoginNew/LoginNew';
 import Manage from './components/manage/Manage';
 import UserContext from './UserContext';
 
@@ -19,7 +19,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.exitConfirm = this.exitConfirm.bind(this);
-    this.usr = this.props.setUser.bind(this);
   }
   exitConfirm(e){
     if(this.props.user!==null&&this.props.user!==undefined)
@@ -45,31 +44,19 @@ class App extends React.Component {
             <Route path="/gallery" component={Gallery} />
             <Route path="/about" component={About} />
             <Route path="/logout">
-              <UserContext.Consumer>
                 {()=>{
-                  this.usr(undefined);
+                  this.context.setUser({});
                   return <Redirect to="/"></Redirect>
                 }}
-              </UserContext.Consumer>
             </Route>
             <Route path="/manage">
-              <UserContext.Consumer>
-              {(obj)=>{
-              try {
-                if(obj.user.login!==undefined&&obj.user.loginToken.length>20)
-                return <Manage />
-                else 
-                return <Redirect to="/login"></Redirect>
-              } catch(e){}
-              return <Redirect to="/login"></Redirect>
-              }}
-              </UserContext.Consumer>
+                {this.context.ifAdminSession()?<Manage />:<Redirect to="/login" />}
             </Route>
             <Route path="/login" >
-              <Login setUser={this.props.setUser} />
+            {this.context.ifSession()?<Redirect to="/" />:<Login />}
               </Route>
-              <Route path="/login-new" >
-              <LoginNew />
+              <Route>
+              <NotFound />
               </Route>            
           </Switch>
       </div>
@@ -77,5 +64,6 @@ class App extends React.Component {
     );
   }
 }
+App.contextType = UserContext;
 
 export default App;
