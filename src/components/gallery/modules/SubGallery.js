@@ -135,7 +135,18 @@ class SubGallery extends React.Component {
                 </div>
                 {this.state.loading ? "loading..." : ""}
                 <div className={Style.imageContainer}>
-                    {this.state.photos.map(i => <GalleryImage
+                    {this.state.canUpload?this.state.photos.map(i => <GalleryImage
+                        src={i.path}
+                        author={i.author}
+                        category={i.category}
+                        date={i.date}
+                        name={i.nameOrTitle}
+                        desc={i.description}
+                        key={i.id}
+                        alt={i.id}
+                        show={this.showFullPhoto}
+                        admin="yes"
+                    />):this.state.photos.map(i => <GalleryImage
                         src={i.path}
                         author={i.author}
                         category={i.category}

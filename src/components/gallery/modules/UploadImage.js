@@ -37,26 +37,6 @@ class UploadImage extends React.Component {
       }
     }
 
-    /*async uploadFiles(){
-      this.setState({ uploadProgress: {}, uploading: true });
-      const promises = [];
-      this.state.files.forEach(file => {
-        let p = this.sendRequest(file);
-        p.then(p=>p.onloadend=(e)=>{this.addPhotoUp(JSON.parse(e.explicitOriginalTarget.responseText))});
-        promises.push(p);
-      });
-      try {
-          await Promise.all(promises);
-        
-        this.setState({ successfullUploaded: true, uploading: false });
-      } catch (e) {
-        // Not Production ready! Do some error handling here instead...
-        this.setState({ successfullUploaded: true, uploading: false });
-        console.log(e);
-     //   e.onerror = e=>console.log("dupa");
-      //  e.onloadend = e=>console.log(e);
-      }
-    }*/
     async uploadFiles(){
       this.setState({ uploadProgress: {}, uploading: true });
       const promises = [];
@@ -95,7 +75,7 @@ class UploadImage extends React.Component {
        req.open("PUT", config.HOST+"/api/photo");
        try{
         req.setRequestHeader("Authorization",
-        "Bearer "+UserContext.Consumer._currentValue.user.loginToken);
+        "Bearer "+this.context.user.loginToken);
         
        } catch (e) {
          //console.log(e);
@@ -185,4 +165,6 @@ class UploadImage extends React.Component {
     }
   }
   
+  UploadImage.contextType = UserContext;
+
   export default UploadImage;

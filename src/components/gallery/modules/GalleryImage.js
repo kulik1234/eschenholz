@@ -1,6 +1,6 @@
 import React from 'react';
 import Style from './css/GalleryImageStyles.module.css';
-
+import UserContext from '../../../UserContext';
 
 class GalleryImage extends React.Component {
 
@@ -17,7 +17,9 @@ class GalleryImage extends React.Component {
         <div className={Style.main}>
             <div className={Style.description}>{
             //this.props.desc
-            }</div>
+            }
+            {this.props.admin?<button>usun</button>:""}
+            </div>
             <div className={Style.imageItem}>
                 <div>
                 <img src={this.props.src} 
@@ -44,5 +46,7 @@ class GalleryImage extends React.Component {
       );
     }
   }
+
+  GalleryImage.contextType = UserContext;
   
   export default GalleryImage;

@@ -5,20 +5,6 @@ import Header from './Header';
 import Footer from './Footer';
 import { BrowserRouter } from 'react-router-dom';
 import UserContext from './UserContext';
-/*
-const Main = () => {
-  console.log(UserContext.Consumer._currentValue);
-  const [usr, setUser] = useState(UserContext);
-  return (<React.Fragment>
-    <BrowserRouter>
-      <UserContext.Provider value={{ user: usr }}>
-        <Header />
-        <App setUser={setUser} />
-        <Footer />
-      </UserContext.Provider>
-    </BrowserRouter>
-  </React.Fragment>);
-}*/
 
 class Main extends React.Component {
   constructor(props){

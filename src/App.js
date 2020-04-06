@@ -21,9 +21,10 @@ class App extends React.Component {
     this.exitConfirm = this.exitConfirm.bind(this);
   }
   exitConfirm(e){
-    if(this.props.user!==null&&this.props.user!==undefined)
-    if(!window.confirm("Jesteś pewny że chcesz opuścić stronę?"))
+    if(this.context.ifSession()){
       e.preventDefault();
+      e.returnValue='';
+    }
   }
 
   componentDidMount() {

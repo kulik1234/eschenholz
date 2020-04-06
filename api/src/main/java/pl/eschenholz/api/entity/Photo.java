@@ -118,7 +118,24 @@ public class Photo extends Base {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Photo photo = (Photo) o;
+        return Objects.equals(id, photo.id) &&
+                Objects.equals(nameOrTitle, photo.nameOrTitle) &&
+                Objects.equals(path, photo.path) &&
+                Objects.equals(description, photo.description) &&
+                Objects.equals(author, photo.author) &&
+                category == photo.category &&
+                Objects.equals(date, photo.date);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameOrTitle, path, description, author, category, date);
+    }
 }
 
 

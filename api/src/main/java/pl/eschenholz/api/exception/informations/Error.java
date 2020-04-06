@@ -1,4 +1,4 @@
-package pl.eschenholz.api.exception.error;
+package pl.eschenholz.api.exception.informations;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;

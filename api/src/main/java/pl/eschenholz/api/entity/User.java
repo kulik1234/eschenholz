@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class User {
+public class User extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

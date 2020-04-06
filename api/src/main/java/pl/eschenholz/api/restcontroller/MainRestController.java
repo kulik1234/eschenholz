@@ -52,7 +52,7 @@ public class MainRestController {
                             .withClaim("login",usr.get().getLogin())
                             .withClaim("role",usr.get().getUserRole().toString())
                             .withIssuedAt((new Date(System.currentTimeMillis())))
-                            .withExpiresAt((new Date(System.currentTimeMillis()+15*60*1000)))
+                            .withExpiresAt((new Date(System.currentTimeMillis()+120*60*1000)))
                             .sign(algorithm);
                             usr.get().setLoginToken(token);
                     return usr.get();
@@ -64,12 +64,12 @@ public class MainRestController {
                 return new User();
             }
             else {
-                throw new UserWrongPasswordException("Podano złe hasło");
+                throw new UserWrongPasswordException();
             }
         }
         else
         {
-            throw new UserNotFoundException("Użytkownik z takim loginem nie został znaleziony");
+            throw new UserNotFoundException(login);
         }
 
 

@@ -6,10 +6,14 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.eschenholz.api.entity.Photo;
 import pl.eschenholz.api.enums.PhotoCategory;
 import pl.eschenholz.api.exception.PhotoNotFoundException;
+import pl.eschenholz.api.exception.PhotoWrongPropsException;
+import pl.eschenholz.api.exception.informations.Message;
+import pl.eschenholz.api.exception.informations.messages.PhotoDeletedSuccessfullyMessage;
 import pl.eschenholz.api.service.FileSystemStorageService;
 import pl.eschenholz.api.service.PhotoService;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @RestController
@@ -109,8 +113,14 @@ public class PhotoController {
     }
 
     @DeleteMapping("/photo")
-    public void removePhoto(@RequestBody Photo p){
-        service.delete(p);
-    }
-
+    public Message removePhoto(@RequestBody Photo p) throws PhotoWrongPropsException {
+        Optional<Photo> ph = service.findById(p.getId());
+            if(ph.orElseThrow(() -> new PhotoNotFoundException(p.getId())).equals(p)){
+                service.delete(p);
+                return new PhotoDeletedSuccessfullyMessage(p.getId());
+            }
+            else {
+                throw new PhotoWrongPropsException();
+            }
+        }
 }

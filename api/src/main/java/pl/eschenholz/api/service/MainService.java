@@ -7,12 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
+import pl.eschenholz.api.entity.Base;
+import pl.eschenholz.api.exception.PhotoNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
-public abstract class MainService<T,R extends PagingAndSortingRepository<T,Long>> {
+public abstract class MainService<T extends Base,R extends PagingAndSortingRepository<T,Long>> {
 
     @Autowired
       private R repo;
@@ -62,8 +64,8 @@ public abstract class MainService<T,R extends PagingAndSortingRepository<T,Long>
         return repo.save(p);
     }
 
-    public void delete(T p) {
-        repo.delete(p);
+    public void delete(T p){
+            repo.delete(p);
     }
 
     public R getRepo() {
