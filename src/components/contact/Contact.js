@@ -3,6 +3,7 @@ import Style from './css/MainContactStyles.module.css';
 import Item from './modules/Item';
 import Message from './modules/Message';
 import GoogleMap from './modules/GoogleMap';
+import Hr from '../home/modules/Hr/Hr';
 
 const col1 = ["ulica","kod pocztowy"];
 const col2 = ["Imie","nazwisko","telefon"];
@@ -17,6 +18,7 @@ class Contact extends React.Component {
         <div className={Style.main}>
           <div className={Style.background}>
             <GoogleMap />
+            <Hr />
             <div className={Style.container}>
               <div className={Style.subcontainer}>
                 <Item label="adres firmy" bolded="1" key="0" />
@@ -32,6 +34,7 @@ class Contact extends React.Component {
                 {col3.map((a, i) => <Item label={a} key={i + 1} />)}
               </div>
             </div>
+            <Hr />
             <Message />
           </div>
         </div>

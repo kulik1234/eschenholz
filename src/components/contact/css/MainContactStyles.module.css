@@ -13,7 +13,6 @@
     justify-content: center;
 }
 .background {
-    background-color: #3533;
     display: flex;
     flex-direction: column;
     justify-content: center;

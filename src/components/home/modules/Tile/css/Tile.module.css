@@ -1,0 +1,38 @@
+.main {
+    display: inline-block;
+    max-width: 300px;
+    width: 300px;
+    min-width: 300px;
+    border: 1px solid;
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+.main .desc{
+    font-size: 0.9em;
+    background-color: #555b;
+    position: absolute;
+    top: 300px;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    transition: 0.5s;
+    text-align: center;
+
+}
+.main .desc h1 {
+    line-height: 2em;
+}
+.main:hover .desc{
+    top: 50px;
+    transition: 0.5s;
+}
+.main img {
+    filter: blur(0px);
+    transition: 0.5s;
+}
+.main:hover img {
+    filter: blur(4px);
+    transition: 0.5s;
+}
